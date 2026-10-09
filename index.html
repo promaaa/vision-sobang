@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Firefighter Robot Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: a progress report in the same style as the concept review. One text column; figures break out wider. */
+:root {
+  --paper: #ffffff;
+  --ink: #1c1c1c;
+  --soft: #555b61;
+  --line: #d4d7da;
+  --link: #1d4e89;
+  --shade: #f3f4f5;
+  --serif: "STIX Two Text", "Times New Roman", Times, serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #17191b; --ink: #e6e6e3; --soft: #a2a7ab; --line: #3a3e42; --link: #8db7e8; --shade: #212427; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #17191b; --ink: #e6e6e3; --soft: #a2a7ab; --line: #3a3e42; --link: #8db7e8; --shade: #212427; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.55 var(--serif); padding-inline: 16px; padding-block: 48px 80px; }
+main { max-width: 46rem; margin: 0 auto; }
+img, video { display: block; width: 100%; height: auto; }
+a { color: var(--link); }
+a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+h1, h2, h3 { font-weight: 700; line-height: 1.2; text-wrap: balance; }
+h1 { font-size: 2.1rem; margin: 0 0 0.3em; }
+h2 { font-size: 1.4rem; margin: 2.4em 0 0.6em; }
+h3 { font-size: 1.1rem; margin: 1.6em 0 0.4em; }
+p, ul, ol { margin: 0 0 0.9em; }
+ul, ol { padding-left: 1.3em; }
+li + li { margin-top: 0.25em; }
+code, pre { font-family: var(--mono); font-size: 0.85em; }
+pre { background: var(--shade); padding: 0.8em 1em; overflow-x: auto; border-radius: 3px; line-height: 1.45; }
+.meta { color: var(--soft); margin-bottom: 1.6em; }
+.abstract { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9em 0; margin-bottom: 1.6em; }
+.abstract p:last-child { margin: 0; }
+figure { margin: 1.4em 0; }
+figure.wide { width: min(66rem, 100vw - 32px); margin-left: 50%; transform: translateX(-50%); }
+figcaption { font-size: 0.95rem; color: var(--soft); margin-top: 0.6em; max-width: 46rem; margin-inline: auto; }
+figcaption b { color: var(--ink); }
+figure.narrow img { max-width: 28rem; margin-inline: auto; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; font-variant-numeric: tabular-nums; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; padding: 0.4em 0.6em; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { border-bottom: 2px solid var(--ink); font-weight: 600; }
+tbody tr:nth-child(even) { background: var(--shade); }
+td.n, th.n { text-align: right; white-space: nowrap; }
+.wide-table { min-width: 40rem; }
+.note { font-size: 0.95rem; color: var(--soft); }
+.folder { font-family: var(--mono); font-size: 0.85rem; color: var(--soft); }
+@media (max-width: 640px) {
+  body { padding-block: 28px 56px; }
+  h1 { font-size: 1.7rem; }
+  .pair { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+
+<main>
+  <h1>Firefighter robot: progress report</h1>
+  <p class="meta">8 October 2026 · for the team meeting next week · nothing is built or measured on the robot yet<br>See also: <a href="concepts/">body concepts A to E</a></p>
+
+  <div class="abstract">
+    <p>This report collects one night of work on the parts of the project outside vision. Marc works on fire detection, so this work stops at the interface to his detector. Every result here comes from simulation, CAD or research. The status words are: built, tested in simulation, measured on laptop, measured on board, planned.</p>
+    <p>The code and files are in the repository folders named in each section. Nothing is committed yet.</p>
+  </div>
+
+  <h2 id="summary">1 Summary</h2>
+  <div class="scroll">
+  <table class="wide-table">
+    <thead><tr><th>Work package</th><th>Status</th><th>Main result</th><th>Folder</th></tr></thead>
+    <tbody>
+      <tr><td>Payload on the legs</td><td>tested in simulation</td><td>Heavy parts belong behind the torso. A and D sit at the 6 Nm policy limit; C is above it.</td><td class="folder">sim/payload</td></tr>
+      <tr><td>Our walking policy with payload</td><td>tested in simulation</td><td>Trained in 37 min on the RTX 3090 with 0 to 2.5 kg. Walks at 0.3 m/s with no fall. Under pushes at 6 Nm, 29 to 61 % of episodes end in a fall; at 20 Nm, 1 to 10 %.</td><td class="folder">sim/rl</td></tr>
+      <tr><td>Official policy with our payloads</td><td>tested in simulation</td><td>The shipped Berkeley policy walks with every payload at 6 Nm. It cannot turn on the spot. In a closed-loop test with our aiming code, concept A walked to a fire and put it out.</td><td class="folder">sim/sim2sim</td></tr>
+      <tr><td>Pan-tilt module for A</td><td>planned (CAD done)</td><td>8 printable parts, STEP and STL, 375 g at 40 % infill. Bolts to the 2020 rails of the torso.</td><td class="folder">cad/parts</td></tr>
+      <tr><td>Splash guard and backpack</td><td>planned (CAD done)</td><td>7 printable parts. Backpack with a 1 L bottle and a 12 V pump: 2.3 kg full. Needs a knee limit of 1.4 rad, or the lower leg can touch it.</td><td class="folder">cad/backpack</td></tr>
+      <tr><td>Aiming code</td><td>tested in simulation</td><td>Interface for Marc's detector, fire position, jet aim, spray logic, UDP runtime. 26 tests pass.</td><td class="folder">aim</td></tr>
+      <tr><td>Camera study</td><td>tested in simulation</td><td>Camera poses that see the floor from about 0.8 m to 5 m without the gun in view. Pixel size of a fire per sensor.</td><td class="folder">cad/camera_views</td></tr>
+      <tr><td>Parts, power and wiring</td><td>planned</td><td>Parts for A cost about 73,000 KRW + 49 USD without cameras. Power comes from the 24 V robot bus through a fuse, an e-stop relay and a 12 V converter.</td><td class="folder">docs/hardware</td></tr>
+      <tr><td>Walking on the real robot</td><td>planned</td><td>How the Berkeley team trains and deploys its policy, and how our walk command can replace their gamepad.</td><td class="folder">docs/locomotion</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="payload">2 Can the legs carry the payload?</h2>
+  <p>We built MuJoCo models of the Berkeley Humanoid Lite with the payload of each concept. We then computed the joint torques in three slow poses: standing, crouching and standing on one leg. One-leg stance happens during every step. We compared the torques with two limits. The walking policy was trained with 6 Nm. The motors in the model allow 20 Nm.</p>
+  <ul>
+    <li>No concept reaches 20 Nm in any pose. The smallest margin is 7.6 Nm, for C.</li>
+    <li>A (5.9 Nm) and D (6.0 Nm) sit at the 6 Nm limit in one-leg stance. C reaches 11.6 to 12.3 Nm. B and E stay below the limit.</li>
+    <li>The standing pose leans the torso forward. Mass behind the torso (x = −0.10 to −0.15 m) costs much less torque than mass in front. Height matters little.</li>
+    <li>Budget: about 2 kg on the torso top, or about 5.5 kg at the backpack position, before the pitch joints reach 6 Nm.</li>
+    <li>For concept A, the simulation recommends the pan axis at x = −0.06 m, with the gun's centre of mass close to the axis. At that position the worst pitch torque is 5.6 to 6.0 Nm.</li>
+    <li>With the masses and positions of the real CAD parts (sections 5 and 6), the worst pitch torque drops to 5.2 Nm for A (5.5 Nm with the gun turned 90°). For B it is 3.9 Nm with a full bottle and 4.4 Nm with an empty one.</li>
+    <li>Plain joint stiffness at the policy gains (kp 20, kd 2) does not keep the robot up, even without payload. The walking policy must provide the balance.</li>
+  </ul>
+  <figure class="wide">
+    <div class="pair"><img src="p_torque.png" alt="Bar chart of peak static leg torque per concept for standing, crouching and one-leg stance, with the 6 Nm and 20 Nm limits." width="1318" height="840"><img src="p_place.png" alt="Heat maps of one-leg pitch torque and push recovery for a 2 kg mass moved over a grid of positions." width="1482" height="773"></div>
+    <figcaption><b>Figure 1.</b> Left: peak static leg torque per concept. Right: torque and push recovery when a 2 kg mass moves over a grid. Mass at negative x (behind the torso) is cheaper.</figcaption>
+  </figure>
+  <p class="note">The one-leg values are an upper bound. The real gait sways sideways and keeps each foot on the ground for a short time only. The walking check (section 3) must confirm the numbers.</p>
+
+  <h2 id="rl">3 Our walking policy with a payload</h2>
+  <p>We trained our own walking policy on the RTX 3090 with MuJoCo Playground. It reuses the Playground "Berkeley Humanoid joystick" task: the robot follows a speed and turn command. During training, a payload of 0 to 2.5 kg sits on the torso, and its centre of mass moves by up to ±3 cm. Each run of 121 million steps took 37 minutes.</p>
+  <ul>
+    <li>In 24 test cases (64 robots, 10 s, no pushes), no robot fell. Asked for 0.3 m/s, the robot walked at 0.29 to 0.31 m/s with 0, 1.5 and 2.5 kg, and with the concept A payload.</li>
+    <li>Asked to turn at 0.5 rad/s, the policy with a 6 Nm limit turned at 0.38 to 0.40 rad/s. With a 20 Nm limit it turned at 0.47 to 0.49 rad/s.</li>
+    <li>With random pushes (the same pushes as in training), many episodes end in a fall at 6 Nm. More torque helps most. A second 6 Nm run with 0 to 3.5 kg, ±5 cm and a knee limit of 1.4 rad did not help, and it turns more slowly (0.24 to 0.27 rad/s).</li>
+  </ul>
+  <table>
+    <thead><tr><th>Policy</th><th class="n">Falls with pushes, 0 kg</th><th class="n">1.5 kg</th><th class="n">3.5 kg</th></tr></thead>
+    <tbody>
+      <tr><td>6 Nm, payload 0–2.5 kg</td><td class="n">29 %</td><td class="n">42 %</td><td class="n">59 %</td></tr>
+      <tr><td>20 Nm, payload 0–2.5 kg</td><td class="n">1 %</td><td class="n">3 %</td><td class="n">10 %</td></tr>
+      <tr><td>6 Nm, payload 0–3.5 kg, knee ≤ 1.4 rad</td><td class="n">43 %</td><td class="n">48 %</td><td class="n">61 %</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Without pushes, all three policies walk at 0.28 to 0.30 m/s with 0 to 2 % falls. The torque limit matters more than the training ranges. We must find out how much torque the real motors give for a long time without overheating.</p>
+  <ul>
+    <li>The Berkeley action scale (0.25) gave a policy that only stood. We used the Playground value (0.5). This is a difference from the Berkeley setup.</li>
+    <li>Not done: push tests in the evaluation, rough ground, concepts B to E, a motor and delay model, export to ONNX, and any test on the robot. Nobody has checked that the real motors give 20 Nm.</li>
+  </ul>
+  <figure class="wide">
+    <div class="pair">
+      <video src="rl_walk_6nm.mp4" poster="rl_walk_poster.jpg" controls muted loop playsinline preload="metadata" aria-label="Our trained policy walks with a 1.5 kg payload at a 6 Nm torque limit."></video>
+      <img src="rl_curves.png" alt="Reward curves of the two training runs, 6 Nm and 20 Nm torque limits." width="840" height="480" loading="lazy">
+    </div>
+    <figcaption><b>Figure 2.</b> Left: our policy walks with 1.5 kg at 6 Nm. Right: reward during the two training runs.</figcaption>
+  </figure>
+
+  <h2 id="sim2sim">4 The official walking policy with our payloads</h2>
+  <p>The Berkeley team ships trained walking policies. We ran their policy file (<code>policy_biped_25hz_a.onnx</code>) in our own MuJoCo loop, with the payload models from section 2. Each test lasted 20 s. The simulation has no motor model, no delay and no IMU error, so the real robot will do worse.</p>
+  <ul>
+    <li>At the 6 Nm torque limit, no model fell in any test, including B with a full tank. Forward speed reached 0.28 to 0.30 m/s of the 0.3 m/s asked, but only 0.16 m/s for B with a full tank.</li>
+    <li>At 4 Nm, the limit in their Python robot runtime, B with a full tank fell in under 1 s. A, D, E and B empty fell in some walking tests. We must run the robot at 6 Nm or more.</li>
+    <li>The policy does not turn on the spot. A turn command of 0.5 rad/s without forward speed gave at most 0.06 rad/s. With 0.2 m/s forward, the turn worked (0.49 to 0.54 rad/s). The cause is their training reward.</li>
+    <li>Without sensor noise, the policy sometimes stands still on a walk command. With the training noise added, it walks in every 6 Nm test.</li>
+  </ul>
+  <p>We changed the aiming code: it now walks a small arc when it must turn, and it turns the pan-tilt instead of the body when it aims.</p>
+  <h3>Closed-loop test: detection, walking and aiming together</h3>
+  <p>We then joined the parts in one MuJoCo run: the official policy at 6 Nm, the aiming code from section 7 and concept A. A fire sat on the floor 2.9 m away and 31° to the left. A virtual camera on the gun produced noisy detections at 10 Hz. The aiming code sent walk commands to the policy and aimed the jet.</p>
+  <ul>
+    <li>The robot reached the spray state at 11.9 s, about 1.9 m from the fire. The fire went out after 3.3 s of spraying. The robot did not fall.</li>
+    <li>From 5 to 11 s the robot stood still, although the aiming code asked for 0.2 m/s. A separate test showed that the policy walks reliably only at 0.25 m/s or faster. We raised the minimum walking speed in the aiming code to 0.25 m/s.</li>
+    <li>With the masses of the real CAD parts and the fire 2 m behind and 1.5 m to the right, the robot searched in an arc, sprayed at 15.3 s and put the fire out. It did not fall.</li>
+    <li>On the real-CAD models, A walks at 0.23 m/s for a 0.25 m/s command. B with a full bottle walks at only 0.11 to 0.14 m/s. B needs a retrained policy.</li>
+    <li>The pan-tilt is simulated without joints, so the gun does not turn in the video.</li>
+  </ul>
+  <figure class="wide">
+    <div class="pair">
+      <video src="s2s_demo.mp4" poster="s2s_demo_poster.jpg" controls muted loop playsinline preload="metadata" aria-label="Closed-loop MuJoCo test: the robot walks toward a fire and sprays a water arc onto it."></video>
+      <img src="s2s_demo.png" alt="Robot path from the start to the spray position, the fire position and the controller states over time." width="1200" height="500" loading="lazy">
+    </div>
+    <figcaption><b>Figure 3.</b> Closed-loop test of concept A in MuJoCo. Left: the video (blue spheres show the water arc). Right: the robot path and the controller states.</figcaption>
+  </figure>
+  <figure class="wide">
+    <div class="pair">
+      <video src="s2s_best.mp4" poster="s2s_best_poster.jpg" controls muted loop playsinline preload="metadata" aria-label="Concept A walks a turn with the official policy at 6 Nm."></video>
+      <video src="s2s_worst.mp4" poster="s2s_worst_poster.jpg" controls muted loop playsinline preload="metadata" aria-label="Concept B with a full tank falls at 4 Nm."></video>
+    </div>
+    <figcaption><b>Figure 4.</b> Left: concept A walks a turn (0.2 m/s and 0.5 rad/s) at 6 Nm. Right: concept B with a full tank falls within 1 s at 4 Nm.</figcaption>
+  </figure>
+
+  <h2 id="parts">5 Pan-tilt module for concept A</h2>
+  <p>This is the first set of real parts. The module carries the water gun now. The same hole pattern (4 × M4 on a 40 mm square) can later take the camera head of B or the valve of E.</p>
+  <ul>
+    <li>The torso top has two 2020 aluminium rails at x = ±60 mm, with their top face at z = 0.791 m. We measured them on the Berkeley mesh.</li>
+    <li>The deck bolts to these rails with 4 M5 screws and drop-in T-nuts.</li>
+    <li>The pan axis turns on a 6808 bearing, so the servo does not carry the load. The tilt has a servo horn on one side and an M8 pin in a 608 bearing on the other side.</li>
+    <li>Servos: standard 40 × 20 mm hobby servos (DS3218 class).</li>
+    <li>8 printed parts, about 375 g at 40 % infill. With the gun, the module weighs about 1.46 kg.</li>
+  </ul>
+  <figure class="wide">
+    <div class="pair"><img src="parts_robot.jpg" alt="The printed pan-tilt module on the torso top of the robot, with a box standing in for the gun." width="960" height="1200" loading="lazy"><img src="parts_exploded.jpg" alt="Exploded view of the module: deck, bearing, pan base, pan yoke, servos, tilt bracket, payload plate and camera brackets." width="900" height="1200" loading="lazy"></div>
+    <figcaption><b>Figure 5.</b> The module on the robot (a box stands in for the gun) and the exploded view.</figcaption>
+  </figure>
+  <h3>Second round: real servo sizes, camera mount, adapters for B and E</h3>
+  <ul>
+    <li>The servo and horn sizes now follow the DS3218 and RJX3366 horn drawings. The README cites the sources.</li>
+    <li>The pan axis stays at x = −38 mm. Further back, the servo would hit the rear rail. Instead, the gun sits so that its centre of mass is at x = −60 mm, 22 mm behind the tilt axis. This is the position that the payload simulation recommends.</li>
+    <li>The USB camera sits on the right of the gun, pitched 16° down. The nearest visible floor is then about 0.8 m.</li>
+    <li>Head for B: RGB and thermal boards side by side, pitched 15° down, with the nozzle 62 mm lower and centred under them. Valve holder for E: a cradle for the Adafruit 997 solenoid valve with a nozzle holder in front.</li>
+    <li>Print plan: concept A needs 3 print jobs on a 220 × 220 mm bed, about 375 g of PLA.</li>
+    <li>Second version for ST3215 bus servos (section 9): a new pan base, yoke and tilt bracket that grip the servo horns. The deck, payload plate and camera brackets stay the same. The printed mass drops from 369 g to 312 g. Three small values (screw threads, one hole spacing) are still guesses.</li>
+  </ul>
+  <figure class="wide">
+    <div class="pair"><img src="parts_A_real.jpg" alt="Concept A with the real printed pan-tilt module and a stand-in water gun on the torso." width="1000" height="1250" loading="lazy"><img src="parts_adapters.jpg" alt="Adapters on the same hole pattern: the camera head of concept B and the valve holder of concept E." width="1400" height="1000" loading="lazy"></div>
+    <figcaption><b>Figure 6.</b> Left: concept A with the real module and a stand-in gun. Right: the B head and the E valve holder on the same hole pattern.</figcaption>
+  </figure>
+  <figure class="narrow">
+    <img src="parts_sts.jpg" alt="The pan-tilt module redesigned for ST3215 bus servos, with the same deck and payload plate." width="1100" height="1100" loading="lazy">
+    <figcaption><b>Figure 7.</b> The module version for ST3215 bus servos.</figcaption>
+  </figure>
+
+  <h2 id="backpack">6 Splash guard and backpack</h2>
+  <p>The splash guard protects the torso electronics from water, for every concept. The backpack is the water system of concept B.</p>
+  <ul>
+    <li>The torso frame is 2020 extrusion. Its front face is at x = +70 mm and its rear face at x = −70 mm.</li>
+    <li>Splash guard: two panels with drip lips, vents under a hood and a covered cable slot. They bolt on with 8 M5 T-nuts and weigh about 91 g.</li>
+    <li>Backpack: two T-nut brackets, a plate, a strapped cradle for a 1 L Nalgene wide-mouth bottle (89 × 210 mm) and a bracket for a Seaflo 21-series 12 V pump. It weighs about 1.37 kg empty and 2.32 kg with water.</li>
+    <li>The splash guard stays at least 34 mm from the legs over the full joint range.</li>
+    <li>Over the full joint range, the lower leg can touch the backpack: for example at hip pitch +0.98 rad with the knee at 2.04 rad. No single CAD change fixes this. A software knee limit of 1.4 rad keeps at least 23 mm. The walking policy must respect this limit, or the backpack must move.</li>
+    <li>The bottle and pump sizes come from a shop listing and the maker's brochure. We have not measured them.</li>
+  </ul>
+  <figure class="wide">
+    <div class="pair"><img src="bp_front.jpg" alt="Robot with the red two-part splash guard on the front of the torso." width="1000" height="1250" loading="lazy"><img src="bp_rear.jpg" alt="Robot from behind with the backpack: bottle in a strapped cradle and a pump on a plate." width="1000" height="1250" loading="lazy"></div>
+    <figcaption><b>Figure 8.</b> Splash guard (front) and concept B backpack (rear).</figcaption>
+  </figure>
+
+  <h2 id="aim">7 Aiming code: from a detection to a water jet</h2>
+  <p>This code starts where Marc's detector stops. It finds the fire on the floor, turns the robot toward it, walks closer, aims the jet and decides when to spray. It runs as one process and talks over UDP, a simple local network protocol.</p>
+  <h3>Interface proposal for Marc</h3>
+  <p>The detector sends one JSON line per fire and frame to <code>127.0.0.1:5600</code>:</p>
+  <pre>{"timestamp": 12345.678, "camera": "rgb", "u": 331.5, "v": 298.0,
+ "bbox": [310, 280, 352, 316], "confidence": 0.87,
+ "max_temp_c": null, "depth_m": null}</pre>
+  <p>The timestamp is <code>time.monotonic()</code> on the robot computer at the time the image was taken. The detector sends nothing when it sees no fire. The commands go out as JSON lines: pan, tilt and pump to the actuator driver, and walk speed and turn rate to the walking policy.</p>
+  <p>Questions for Marc:</p>
+  <ol>
+    <li>Does the detector correct the lens distortion?</li>
+    <li>Which point is (u, v): the box centre, the hottest pixel or the base of the flame? The code assumes the fire touches the floor at (u, v).</li>
+    <li>Which cameras, image sizes and fields of view do you use?</li>
+    <li>What frame rate and delay does the detector have?</li>
+  </ol>
+  <h3>What the code does</h3>
+  <ul>
+    <li>States: search, approach, aim, spray, check, done. It sprays only with a recent, confident detection inside the jet range.</li>
+    <li>A small Kalman filter smooths the fire position and rejects outliers.</li>
+    <li>The jet solver allows for the nozzle offset and, if wanted, air drag. It takes 0.35 ms with drag and 0.07 ms without (measured on laptop).</li>
+    <li>It uses the pan and tilt angles at the time the image was taken, so a 100 ms delay gives an error of 0.25 mm instead of 9 cm.</li>
+    <li>You can test the pipe without a camera: <code>send_test_detections.py</code> replays fake detections into <code>run.py</code>.</li>
+    <li>The official walking policy cannot turn on the spot (section 4). So every body turn now has a forward speed of at least 0.2 m/s. Once the fire is in range, only the pan-tilt turns, up to 90° each side. Closer than 0.7 m, the robot steps back.</li>
+  </ul>
+  <figure class="narrow">
+    <img src="aim_demo.png" alt="Toy simulation: top view of the robot path to the fire, side view of the jet arc hitting the fire, and the controller states over time." width="880" height="1430" loading="lazy">
+    <figcaption><b>Figure 9.</b> Toy simulation of concept A: the robot turns, walks to 2 m from the fire, aims and sprays. The jet speed (8 m/s) is a placeholder until we measure it.</figcaption>
+  </figure>
+
+  <h2 id="cameras">8 What the cameras see</h2>
+  <p>We rendered the view of each robot camera in a test room with fires at 1, 2, 3 and 5 m. We also computed how many pixels a 20 cm fire covers for each sensor. These results help Marc choose; they do not choose for him.</p>
+  <ul>
+    <li>At the first CAD positions, the gun or nozzle hid part of the image, and the floor closer than 2 to 2.6 m was out of view.</li>
+    <li>With a 90° camera, small moves fix this. On A, the lens goes 4 cm to the side and 8 cm down, pitched 16° down: the floor is visible from 0.81 m. On B, the nozzle goes 5 cm lower, under the head. On E, the lens moves 4 cm on the pod, pitched 14° down.</li>
+    <li>No 60° camera reaches the goal: its nearest visible floor is 0.87 to 1.00 m.</li>
+    <li>A 20 cm fire covers fewer than 3 × 3 pixels on the MLX90640 from 1 m (wide lens) or 3 m (narrow lens). The Lepton 3.5 and the 256 × 192 USB thermal camera stay above 3 × 3 pixels up to 8 m. The 3 × 3 limit is a rule of thumb, not a measured limit.</li>
+  </ul>
+  <figure class="wide">
+    <img src="cam_overview.jpg" alt="Bird's-eye view of the camera fields of view of concepts A, B and E on the floor." width="1800" height="679" loading="lazy">
+    <figcaption><b>Figure 10.</b> Camera fields of view on the floor for concepts A, B and E at the first CAD positions.</figcaption>
+  </figure>
+  <figure>
+    <img src="cam_round2.jpg" alt="Camera views before and after the pose change for concepts A, B and E." width="1296" height="1580" loading="lazy">
+    <figcaption><b>Figure 11.</b> Camera views before and after the recommended pose change (90° camera).</figcaption>
+  </figure>
+
+  <h2 id="hardware">9 Parts, power and wiring</h2>
+  <p>We researched the parts, the robot's power system and the water jet. Every price has a link and an access date in <code>docs/hardware/</code>. Prices change. Some small parts have no price yet. Most Devicemart prices were read only once: the site refused all connections from 23:44 to 00:18 KST, so nobody could check them again.</p>
+  <h3>Robot power</h3>
+  <ul>
+    <li>The Berkeley robot runs on a 6S 4000 mAh LiPo battery (about 89 Wh) with a 24 V bus. The sources give about 30 minutes of runtime.</li>
+    <li>Its 22 motors sit on four CAN buses at 1 Mbit/s. An Intel N95 mini PC runs the policy.</li>
+    <li>The plan taps the 24 V bus after the robot's main switch, through our own 10 A fuse, a power relay and a 24 V to 12 V, 10 A converter. The e-stop opens the relay coil and cuts all add-on power. It does not stop the leg motors.</li>
+  </ul>
+  <h3>Cost and main choices</h3>
+  <table>
+    <thead><tr><th>Concept</th><th class="n">Parts in KRW</th><th class="n">Parts in USD</th><th>Not included</th></tr></thead>
+    <tbody>
+      <tr><td>A</td><td class="n">73,310</td><td class="n">48.97</td><td>cameras, shipping</td></tr>
+      <tr><td>B</td><td class="n">129,308</td><td class="n">48.97</td><td>cameras, shipping</td></tr>
+      <tr><td>E</td><td class="n">121,424</td><td class="n">48.97</td><td>cameras, shipping, outside pump</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>Servos: the research suggests two Feetech ST3215 serial bus servos at 12 V. They report their position and load. The CAD in section 5 was drawn for DS3218-class hobby servos; the team must choose one type.</li>
+    <li>Switching: a 2-channel relay module on a Raspberry Pi Pico fires the gun (A) or switches the pump (B) or valve (E).</li>
+    <li>Gun for the first test: the 5,000 KRW Daiso water gun. Its tank holds only about 100 mL, so a larger gun is better for a demonstration.</li>
+  </ul>
+  <h3>Water jet</h3>
+  <p>With the Seaflo pump (3.8 L/min, 0.28 MPa) and a 2 mm nozzle, the estimate is 2.55 L/min at 13.6 m/s. Without air drag that gives 16 to 19 m of range. The real range is much shorter, and we must measure it. The recoil on the robot is under 1.3 N.</p>
+  <h3>Cameras (for Marc, no choice made)</h3>
+  <p>The README compares 8 thermal and 8 RGB or depth cameras. Only the InfiRay P2 Pro and the Topdon TC001 (256 × 192) give 25 Hz thermal video over plain USB video (UVC). The FLIR Lepton 3.5 runs at under 9 Hz because of export rules. The MLX90640 costs about 88,000 KRW but has only 32 × 24 pixels.</p>
+  <h3>Wiring for concept A</h3>
+  <div class="scroll"><pre class="mermaid">flowchart LR
+  subgraph PWR[&quot;Add-on power&quot;]
+    BUS[&quot;BHL 24 V bus, 6S LiPo&lt;br/&gt;after main switch and breaker&quot;] --&gt; F1[&quot;Fuse 10 A&lt;br/&gt;at the XT30 tap&quot;]
+    F1 --&gt; K1[&quot;Power relay K1&lt;br/&gt;contact, 40 A&quot;]
+    F1 --&gt; ES1[&quot;E-stop contact 1&lt;br/&gt;NC, latching&quot;]
+    ES1 --&gt; K1C[&quot;K1 coil, 24 V&quot;]
+    K1 --&gt; DC1[&quot;DC-DC buck&lt;br/&gt;24 V to 12 V, 10 A&quot;]
+  end
+  subgraph SIG[&quot;Signals&quot;]
+    PC[&quot;Robot computer&lt;br/&gt;BHL N95 mini PC&quot;] --&gt;|USB| HUB[&quot;Powered USB hub&quot;]
+    HUB --&gt;|USB| MCU[&quot;MCU&lt;br/&gt;Raspberry Pi Pico&quot;]
+    HUB --&gt;|USB| CAM[&quot;USB RGB camera&lt;br/&gt;on the gun&quot;]
+  end
+  subgraph PT[&quot;Pan-tilt&quot;]
+    ADP[&quot;Bus servo adapter&quot;] --&gt;|&quot;servo bus&lt;br/&gt;12 V + data&quot;| SP[&quot;Pan servo ST3215&quot;]
+    SP --&gt;|daisy chain| ST[&quot;Tilt servo ST3215&quot;]
+  end
+  subgraph GUN[&quot;Water gun, own battery&quot;]
+    GB[&quot;Gun battery&quot;] --&gt; ES2[&quot;E-stop contact 2&lt;br/&gt;NC&quot;]
+    ES2 --&gt; TRG[&quot;Gun trigger switch&quot;]
+    TRG --&gt; GM[&quot;Gun pump motor&quot;]
+  end
+  DC1 --&gt;|12 V| ADP
+  HUB --&gt;|USB| ADP
+  MCU --&gt;|&quot;GPIO 3.3 V&lt;br/&gt;+ 5 V supply&quot;| RLY[&quot;Relay module&lt;br/&gt;channel 1&quot;]
+  RLY -.-|&quot;contact in parallel&lt;br/&gt;with the trigger&quot;| TRG
+</pre></div>
+
+  <h2 id="deploy">10 Walking on the real robot</h2>
+  <p>We read the Berkeley code, paper and documentation. We did not run their code.</p>
+  <ul>
+    <li>Training: Isaac Lab with PPO, task <code>Velocity-Berkeley-Humanoid-Lite-Biped-v0</code>, 4096 parallel robots, about two hours. The policy has 45 inputs and 12 outputs and runs at 25 Hz.</li>
+    <li>Their training already adds −1 to +2 kg to the torso. It never moves the centre of mass. We need up to 3.5 kg and a centre-of-mass offset.</li>
+    <li>On the robot: an Intel N95 mini PC with Ubuntu 22.04 runs the policy as an ONNX file. The motors talk CAN at 1 Mbit/s through USB-CAN adapters. The joint zeros need a new calibration after each power cycle.</li>
+    <li>The walk command comes from a USB gamepad in their Python runtime. A small replacement class can read our UDP command instead, without any edit to their files. It stops the robot after 0.5 s without a message.</li>
+    <li>Risk: Isaac Sim 5.1 lists an RTX 4080 on Ubuntu as the minimum. Our training PC has an RTX 3090 on an Arch-based system.</li>
+  </ul>
+
+  <h2 id="next">11 Proposed tasks for next week</h2>
+  <p>These are proposals for the meeting. The team decides.</p>
+  <ol>
+    <li><b>Choose the concept.</b> We suggest A first. Its top module can later take the head of B or the valve of E.</li>
+    <li><b>Order and print for A.</b> Print the 3 jobs (about 375 g of PLA). Choose the servo type (ST3215 bus servo or DS3218 hobby servo) and order two, a 6808 and a 608 bearing, M5 drop-in T-nuts and the water gun (section 9).</li>
+    <li><b>Vision (Marc).</b> Answer the four interface questions in section 7. Use the pixel table in section 8 to choose the cameras. Send detections to <code>aim/run.py</code> on UDP 5600; <code>send_test_detections.py</code> shows the format.</li>
+    <li><b>Walking.</b> Run the official policy at 6 Nm, not 4 Nm. Reproduce their training, then retrain with 0 to 3.5 kg on the torso and a centre-of-mass offset. Decide whether to add a turn-on-the-spot reward.</li>
+    <li><b>Measure.</b> Weigh the gun full and empty and find its centre of mass. Measure the jet speed with the method in <code>aim/README.md</code>.</li>
+    <li><b>Integrate.</b> Write the actuator driver for the chosen servo driver. Write the small bridge that replaces the Berkeley gamepad input (section 10).</li>
+    <li><b>Safety.</b> Print the splash guard. Add an emergency stop before the first test with water.</li>
+  </ol>
+  <h3>Open questions</h3>
+  <ul>
+    <li>Which computer runs the detector and the aiming code: the robot's N95 mini PC or a laptop over Wi-Fi?</li>
+    <li>Where is the robot battery, and can it move back? The payload simulation shows that moving it back saves 0.6 to 0.7 Nm.</li>
+    <li>Can we train with Isaac Sim on our RTX 3090 and Arch-based system, or do we need another machine?</li>
+  </ul>
+
+  <h2 id="notes">Notes</h2>
+  <p class="note">The Berkeley Humanoid Lite models and meshes come from <a href="https://github.com/HybridRobotics/berkeley-humanoid-lite-assets" target="_blank" rel="noopener">HybridRobotics/berkeley-humanoid-lite-assets</a> (CC BY-SA 4.0). All masses of added parts are estimates. Every folder has a README with the method, the commands and the limits.</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad: true, theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "neutral"});</script>
+</body>
+</html>
