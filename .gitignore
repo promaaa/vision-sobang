@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Berkeley assets: scripts/fetch_bhl_assets.sh downloads them
+third_party/
+# Local copies of the slide deck and the old report pages
+docs/share/
+# Fire scene dataset: download it from the GitHub release (see sim/firescenes/README.md).
+# Only the contact sheet and the sequence videos stay in git.
+sim/firescenes/out/*
+!sim/firescenes/out/contact_sheet.jpg
+!sim/firescenes/out/sequence/
+sim/firescenes/out/sequence/*
+!sim/firescenes/out/sequence/*.mp4
+# Written by every camera_loop.py run, with absolute mesh paths
+sim/sim2sim/results/scene_A_real.xml
