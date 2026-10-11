@@ -1,0 +1,31 @@
+part             vol cm3  solid g  print g  bbox mm
+guard_upper         51.5       64       45  11 x 156 x 121
+guard_lower         52.5       65       46  11 x 156 x 131
+bracket_upper       34.2       42       30  12 x 150 x 20
+bracket_lower       87.6      109       76  12 x 170 x 44
+plate              215.2      267      187  5 x 216 x 200
+cradle             202.1      251      175  72 x 113 x 150
+pump_bracket        39.7       49       34  15 x 96 x 76
+backpack printed parts 502 g; with pump 570 g, bottle 180 g (guess), hardware + straps + hose 120 g (guess): empty 1372 g, with 946 g water 2318 g
+leg clearance, full URDF range:
+  cradle          min   0.0 mm, left leg, roll/yaw/pitch/knee = (0.116, 0.065, 0.982, 2.036) rad
+  plate           min   0.1 mm, right leg, roll/yaw/pitch/knee = (-0.116, 0.916, 0.862, 2.342) rad
+  ref_pump        min   0.1 mm, right leg, roll/yaw/pitch/knee = (0.175, 0.589, 0.982, 1.832) rad
+  ref_tank        min   0.1 mm, left leg, roll/yaw/pitch/knee = (0.116, 0.327, 0.982, 2.036) rad
+  bracket_lower   min  27.4 mm, left leg, roll/yaw/pitch/knee = (0.116, -0.72, 0.982, 2.24) rad
+  guard_lower     min  34.3 mm, left leg, roll/yaw/pitch/knee = (1.571, -0.196, 0.982, 2.443) rad
+  pump_bracket    min  36.1 mm, right leg, roll/yaw/pitch/knee = (-0.043, 0.851, 0.982, 2.036) rad
+  guard_upper     more than 60 mm
+  bracket_upper   more than 60 mm
+leg clearance, knee <= 1.4 rad:
+  ref_tank        min  23.2 mm, right leg, roll/yaw/pitch/knee = (-0.262, 0.982, 0.982, 1.4) rad
+  cradle          min  30.7 mm, right leg, roll/yaw/pitch/knee = (-0.407, 0.982, 0.982, 1.4) rad
+  ref_pump        min  36.9 mm, left leg, roll/yaw/pitch/knee = (0.262, -0.982, 0.982, 1.4) rad
+  guard_lower     min  46.2 mm, right leg, roll/yaw/pitch/knee = (0.175, -0.196, -1.898, -0.0) rad
+  plate           min  52.7 mm, right leg, roll/yaw/pitch/knee = (0.029, -0.589, -1.898, -0.0) rad
+  guard_upper     more than 60 mm
+  bracket_upper   more than 60 mm
+  bracket_lower   more than 60 mm
+  pump_bracket    more than 60 mm
+checks passed: bed fit, wall >= 2 mm, leg clearance > 10 mm with knee <= 1.4 rad
+exit 0

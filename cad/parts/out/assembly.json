@@ -1,0 +1,186 @@
+{
+ "tilt_axis_mm": [
+  -38.0,
+  0.0,
+  72.3
+ ],
+ "pan_axis_mm": [
+  -38.0,
+  0.0
+ ],
+ "tilting": [
+  "tilt_u",
+  "payload_plate",
+  "cam_usb32",
+  "cam_mlx90640",
+  "cam_purethermal",
+  "ref_gun"
+ ],
+ "alternatives": [
+  "cam_purethermal",
+  "head_b",
+  "valve_e"
+ ],
+ "parts": {
+  "deck": {
+   "volume_cm3": 110.7,
+   "mass_g": 93,
+   "mass_solid_g": 137,
+   "bbox_mm": [
+    158.0,
+    130.0,
+    6.0
+   ],
+   "min_wall_scan_mm": 2.5
+  },
+  "pan_base": {
+   "volume_cm3": 80.4,
+   "mass_g": 58,
+   "mass_solid_g": 100,
+   "bbox_mm": [
+    80.0,
+    80.0,
+    21.6
+   ],
+   "min_wall_scan_mm": 2.0
+  },
+  "pan_yoke": {
+   "volume_cm3": 58.3,
+   "mass_g": 49,
+   "mass_solid_g": 72,
+   "bbox_mm": [
+    76.0,
+    76.0,
+    73.7
+   ],
+   "min_wall_scan_mm": 2.05
+  },
+  "tilt_u": {
+   "volume_cm3": 44.0,
+   "mass_g": 37,
+   "mass_solid_g": 55,
+   "bbox_mm": [
+    56.0,
+    75.5,
+    48.0
+   ],
+   "min_wall_scan_mm": 2.05
+  },
+  "payload_plate": {
+   "volume_cm3": 119.4,
+   "mass_g": 109,
+   "mass_solid_g": 148,
+   "bbox_mm": [
+    200.0,
+    158.0,
+    17.0
+   ],
+   "min_wall_scan_mm": 2.5
+  },
+  "cam_usb32": {
+   "volume_cm3": 12.0,
+   "mass_g": 13,
+   "mass_solid_g": 15,
+   "bbox_mm": [
+    44.9,
+    38.0,
+    41.5
+   ],
+   "min_wall_scan_mm": 2.05
+  },
+  "cam_mlx90640": {
+   "volume_cm3": 9.3,
+   "mass_g": 10,
+   "mass_solid_g": 12,
+   "bbox_mm": [
+    42.8,
+    31.4,
+    34.6
+   ],
+   "min_wall_scan_mm": 2.05
+  },
+  "cam_purethermal": {
+   "volume_cm3": 9.7,
+   "mass_g": 10,
+   "mass_solid_g": 12,
+   "bbox_mm": [
+    44.0,
+    30.0,
+    40.5
+   ],
+   "min_wall_scan_mm": 2.05
+  },
+  "head_b": {
+   "volume_cm3": 145.6,
+   "mass_g": 120,
+   "mass_solid_g": 181,
+   "bbox_mm": [
+    70.9,
+    84.0,
+    106.4
+   ],
+   "min_wall_scan_mm": 2.05
+  },
+  "valve_e": {
+   "volume_cm3": 41.5,
+   "mass_g": 39,
+   "mass_solid_g": 51,
+   "bbox_mm": [
+    123.0,
+    58.5,
+    30.5
+   ],
+   "min_wall_scan_mm": 2.0
+  }
+ },
+ "min_walls_mm": {
+  "bearing housing": 13.0,
+  "cavity to housing": 5.24,
+  "hub ring under horn screws": 11.3,
+  "lip under 608": 2.5,
+  "nut pocket floor (deck)": 2.5,
+  "nut pocket floor (U)": 2.8,
+  "plate under counterbore": 2.5,
+  "M8 pocket floor": 2.5
+ },
+ "print_jobs_g": {
+  "J1": 132,
+  "J2": 131,
+  "J3": 111,
+  "J4": 167
+ },
+ "gun_com_dx_mm": -22.0,
+ "heights_mm": {
+  "shelf": 6.0,
+  "pan_bearing": [
+   20.599999999999998,
+   27.599999999999998
+  ],
+  "turntable": [
+   28.599999999999998,
+   33.599999999999994
+  ],
+  "tilt_axis": 72.3,
+  "u_base": [
+   97.3,
+   103.3
+  ],
+  "plate_top": 108.3
+ },
+ "com_no_gun": {
+  "mass_kg": 0.552,
+  "xyz_m": [
+   -0.023,
+   -0.002,
+   0.843
+  ]
+ },
+ "com_with_gun": {
+  "mass_kg": 1.452,
+  "xyz_m": [
+   -0.046,
+   -0.001,
+   0.904
+  ]
+ }
+}

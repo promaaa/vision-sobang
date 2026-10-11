@@ -1,0 +1,121 @@
+{
+ "h_base_mm": 80.0,
+ "parts": {
+  "base_clamp": {
+   "volume_cm3": 324.0,
+   "mass_g": 316,
+   "mass_solid_g": 402,
+   "bbox_mm": [
+    170.0,
+    216.0,
+    66.0
+   ],
+   "min_wall_scan_mm": 2.0
+  },
+  "base_tripod": {
+   "volume_cm3": 316.8,
+   "mass_g": 308,
+   "mass_solid_g": 393,
+   "bbox_mm": [
+    170.0,
+    180.0,
+    66.0
+   ],
+   "min_wall_scan_mm": 2.0
+  },
+  "tray": {
+   "volume_cm3": 199.6,
+   "mass_g": 210,
+   "mass_solid_g": 247,
+   "bbox_mm": [
+    200.0,
+    200.0,
+    128.0
+   ],
+   "min_wall_scan_mm": 2.5
+  },
+  "cradle": {
+   "volume_cm3": 202.1,
+   "mass_g": 162,
+   "mass_solid_g": 251,
+   "bbox_mm": [
+    71.5,
+    113.0,
+    150.5
+   ],
+   "min_wall_scan_mm": 1.07
+  },
+  "ebox": {
+   "volume_cm3": 188.2,
+   "mass_g": 220,
+   "mass_solid_g": 233,
+   "bbox_mm": [
+    165.0,
+    105.0,
+    93.0
+   ],
+   "min_wall_scan_mm": 2.25
+  },
+  "ebox_lid": {
+   "volume_cm3": 70.5,
+   "mass_g": 80,
+   "mass_solid_g": 87,
+   "bbox_mm": [
+    172.0,
+    112.0,
+    13.0
+   ],
+   "min_wall_scan_mm": 2.5
+  }
+ },
+ "estop_xyz_mm": [
+  -193.0,
+  -211.0,
+  16.0
+ ],
+ "bottle_xy_mm": [
+  -268.5,
+  40.0
+ ],
+ "bottle_top_z_mm": 136.0,
+ "pump_xyz_mm": [
+  -175.0,
+  -12.0,
+  -38.0
+ ],
+ "clearance": {
+  "gun_rear_low_z_mm": 5.5,
+  "pump_top_z_mm": -7.0,
+  "gun_sweep_r_mm": 175.6,
+  "bottle_r_mm": 189.4
+ },
+ "stability": {
+  "mass_kg": 1.89,
+  "turning_kg": 1.19,
+  "footprint_mm": [
+   [
+    -85,
+    -108
+   ],
+   [
+    85,
+    -108
+   ],
+   [
+    85,
+    108
+   ],
+   [
+    -85,
+    108
+   ]
+  ],
+  "com_pan90_mm": [
+   -26.2,
+   -8.2
+  ],
+  "margin_pan90_mm": 58.8,
+  "worst_margin_mm": 50.3,
+  "worst_pan_deg": 0
+ }
+}
