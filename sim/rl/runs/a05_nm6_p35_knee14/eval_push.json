@@ -1,0 +1,65 @@
+{
+ "0kg/stand": {
+  "fall_rate": 0.46875,
+  "lin_vel_err_mps": 0.11694529231377017,
+  "yaw_rate_err_radps": 0.25800833106040955,
+  "mean_vx_mps": 0.012636234983801842,
+  "mean_yaw_rate_radps": -0.01858830824494362
+ },
+ "0kg/forward_0.3": {
+  "fall_rate": 0.359375,
+  "lin_vel_err_mps": 0.11211005417357463,
+  "yaw_rate_err_radps": 0.409367173910141,
+  "mean_vx_mps": 0.29727476835250854,
+  "mean_yaw_rate_radps": 0.07415210455656052
+ },
+ "0kg/turn_0.5": {
+  "fall_rate": 0.453125,
+  "lin_vel_err_mps": 0.11733877651110858,
+  "yaw_rate_err_radps": 0.363870233297348,
+  "mean_vx_mps": -0.0021339517552405596,
+  "mean_yaw_rate_radps": 0.25953638553619385
+ },
+ "3.5kg/stand": {
+  "fall_rate": 0.578125,
+  "lin_vel_err_mps": 0.0847094562900168,
+  "yaw_rate_err_radps": 0.21349498629570007,
+  "mean_vx_mps": 0.010192103683948517,
+  "mean_yaw_rate_radps": -0.0036441206466406584
+ },
+ "3.5kg/forward_0.3": {
+  "fall_rate": 0.609375,
+  "lin_vel_err_mps": 0.0962464806767769,
+  "yaw_rate_err_radps": 0.3393799364566803,
+  "mean_vx_mps": 0.27686572074890137,
+  "mean_yaw_rate_radps": -0.023354990407824516
+ },
+ "3.5kg/turn_0.5": {
+  "fall_rate": 0.640625,
+  "lin_vel_err_mps": 0.09011911085290533,
+  "yaw_rate_err_radps": 0.344618558883667,
+  "mean_vx_mps": -0.0020731741096824408,
+  "mean_yaw_rate_radps": 0.2326609045267105
+ },
+ "1.5kg/stand": {
+  "fall_rate": 0.46875,
+  "lin_vel_err_mps": 0.08738648789581083,
+  "yaw_rate_err_radps": 0.22881707549095154,
+  "mean_vx_mps": 0.0136951245367527,
+  "mean_yaw_rate_radps": -0.009735754691064358
+ },
+ "1.5kg/forward_0.3": {
+  "fall_rate": 0.46875,
+  "lin_vel_err_mps": 0.08810263532182198,
+  "yaw_rate_err_radps": 0.37756356596946716,
+  "mean_vx_mps": 0.2967393398284912,
+  "mean_yaw_rate_radps": 0.011276531033217907
+ },
+ "1.5kg/turn_0.5": {
+  "fall_rate": 0.515625,
+  "lin_vel_err_mps": 0.09382502906863212,
+  "yaw_rate_err_radps": 0.3474769592285156,
+  "mean_vx_mps": -0.0005597056006081402,
+  "mean_yaw_rate_radps": 0.2560185194015503
+ }
+}

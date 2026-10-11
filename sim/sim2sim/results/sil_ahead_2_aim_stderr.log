@@ -1,0 +1,3 @@
+run.py: concept A, detections on udp 127.0.0.1:5600, pose on 5605, commands to udp ports [5601, 5602]
+run.py: no fresh feedback, using the commanded angles
+run.py: no fresh pose on udp 5605, dead reckoning from the walk command

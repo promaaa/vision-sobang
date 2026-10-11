@@ -1,0 +1,86 @@
+{
+ "0kg/stand": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.03328666489215231,
+  "yaw_rate_err_radps": 0.026888452470302582,
+  "mean_vx_mps": 0.00020077370572835207,
+  "mean_yaw_rate_radps": -0.001042859279550612
+ },
+ "0kg/forward_0.3": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.3008972521149256,
+  "yaw_rate_err_radps": 0.028601136058568954,
+  "mean_vx_mps": 1.1212872777832672e-05,
+  "mean_yaw_rate_radps": -0.0005825667758472264
+ },
+ "0kg/turn_0.5": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.04691042549517853,
+  "yaw_rate_err_radps": 0.4911268353462219,
+  "mean_vx_mps": -0.0027587858494371176,
+  "mean_yaw_rate_radps": 0.010298656299710274
+ },
+ "2.5kg/stand": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.024275339529954847,
+  "yaw_rate_err_radps": 0.02616230770945549,
+  "mean_vx_mps": 6.318455416476354e-05,
+  "mean_yaw_rate_radps": -0.0013939968775957823
+ },
+ "2.5kg/forward_0.3": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.3006620615730916,
+  "yaw_rate_err_radps": 0.04024866223335266,
+  "mean_vx_mps": 0.0001228417968377471,
+  "mean_yaw_rate_radps": -0.002396383322775364
+ },
+ "2.5kg/turn_0.5": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.0445052699363395,
+  "yaw_rate_err_radps": 0.4685310423374176,
+  "mean_vx_mps": -0.0019672780763357878,
+  "mean_yaw_rate_radps": 0.03364352881908417
+ },
+ "A_1.44kg_high/stand": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.025114162265240002,
+  "yaw_rate_err_radps": 0.02682756818830967,
+  "mean_vx_mps": 0.0008577893604524434,
+  "mean_yaw_rate_radps": -0.0010777373099699616
+ },
+ "A_1.44kg_high/forward_0.3": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.3006312492529478,
+  "yaw_rate_err_radps": 0.03748894855380058,
+  "mean_vx_mps": 0.00019653029448818415,
+  "mean_yaw_rate_radps": -0.002607306931167841
+ },
+ "A_1.44kg_high/turn_0.5": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.041466531664940326,
+  "yaw_rate_err_radps": 0.4790101647377014,
+  "mean_vx_mps": -0.004623425658792257,
+  "mean_yaw_rate_radps": 0.02257828414440155
+ },
+ "1.5kg/stand": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.026187141768861357,
+  "yaw_rate_err_radps": 0.026377342641353607,
+  "mean_vx_mps": 0.00046418808051384985,
+  "mean_yaw_rate_radps": -0.001140106120146811
+ },
+ "1.5kg/forward_0.3": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.3006718275412334,
+  "yaw_rate_err_radps": 0.03439069911837578,
+  "mean_vx_mps": 0.00013151577149983495,
+  "mean_yaw_rate_radps": -0.001818764372728765
+ },
+ "1.5kg/turn_0.5": {
+  "fall_rate": 0.0,
+  "lin_vel_err_mps": 0.04344071732212322,
+  "yaw_rate_err_radps": 0.47676506638526917,
+  "mean_vx_mps": -0.003099736524745822,
+  "mean_yaw_rate_radps": 0.02511340193450451
+ }
+}
