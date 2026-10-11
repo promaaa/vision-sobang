@@ -1,0 +1,112 @@
+/* Wiki style after the Arch Wiki: dark top bar, sticky contents, plain sans text, boxed notes and tables. */
+:root {
+  --bg: #ffffff;
+  --text: #222222;
+  --muted: #54595d;
+  --link: #0077bb;
+  --rule: #a2a9b1;
+  --panel: #f8f9fa;
+  --panel-head: #eaecf0;
+  --code-bg: #ebf1f5;
+  --code-rule: #bbccdd;
+  --bar: #333333;
+  --bar-text: #999999;
+  --note-bg: #eef5fb; --note-rule: #6f9fca;
+  --tip-bg: #eff8ec; --tip-rule: #6aa84f;
+  --warn-bg: #fbeeee; --warn-rule: #cc4444;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1d1f; --text: #dcdcdc; --muted: #a0a6ab; --link: #5aa9e6; --rule: #4a5056;
+    --panel: #232629; --panel-head: #2c3034; --code-bg: #24292e; --code-rule: #3b4a58;
+    --bar: #111111; --bar-text: #9a9a9a;
+    --note-bg: #1f2a35; --note-rule: #4f7fae; --tip-bg: #1f2b1f; --tip-rule: #5a8f45;
+    --warn-bg: #321f1f; --warn-rule: #b04444;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1d1f; --text: #dcdcdc; --muted: #a0a6ab; --link: #5aa9e6; --rule: #4a5056;
+  --panel: #232629; --panel-head: #2c3034; --code-bg: #24292e; --code-rule: #3b4a58;
+  --bar: #111111; --bar-text: #9a9a9a;
+  --note-bg: #1f2a35; --note-rule: #4f7fae; --tip-bg: #1f2b1f; --tip-rule: #5a8f45;
+  --warn-bg: #321f1f; --warn-rule: #b04444;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 sans-serif; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+/* Top bar */
+.topbar { background: var(--bar); border-bottom: 4px solid var(--link); }
+.topbar div { max-width: 1240px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 52px; flex-wrap: wrap; }
+.topbar .name { color: #fff; font-weight: bold; font-size: 1.15rem; letter-spacing: 0.01em; }
+.topbar nav a { color: var(--bar-text); font-weight: bold; margin-left: 1.4em; font-size: 0.95rem; }
+.topbar nav a:first-child { margin-left: 0; }
+.topbar nav a:hover, .topbar nav a[aria-current] { color: #fff; text-decoration: none; }
+
+/* Page frame: contents on the left, article on the right */
+.page { max-width: 1240px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2rem; }
+.toc { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 1.5rem 0 2rem; font-size: 0.875rem; }
+.toc h2 { font-size: 0.875rem; font-weight: bold; margin: 0 0 0.5em; padding-bottom: 0.4em; border-bottom: 1px solid var(--rule); }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc ol ol { padding-left: 1.1em; }
+.toc li { margin: 0.3em 0; line-height: 1.35; }
+.toc .n { color: var(--text); margin-right: 0.35em; }
+article { min-width: 0; padding: 1.2rem 0 3rem; }
+
+h1, h2 { font-weight: normal; border-bottom: 1px solid var(--rule); line-height: 1.3; }
+h1 { font-size: 1.85rem; margin: 0 0 0.15em; }
+h2 { font-size: 1.45rem; margin: 1.6em 0 0.5em; padding-bottom: 0.1em; clear: both; }
+h3 { font-size: 1.15rem; margin: 1.3em 0 0.3em; }
+p, ul, ol, dl { margin: 0.4em 0 0.8em; }
+ul, ol { padding-left: 1.6em; }
+li { margin: 0.2em 0; }
+.subtitle { color: var(--muted); font-size: 0.875rem; margin: 0 0 1.2em; }
+
+/* Boxes */
+.related { float: right; clear: right; width: 18rem; margin: 0 0 1em 1.4em; padding: 0.5em 0.8em; background: var(--panel); border: 1px solid var(--rule); font-size: 0.875rem; }
+.related b { display: block; margin-bottom: 0.2em; }
+.related ul { list-style: none; padding: 0; margin: 0; }
+.box { display: flow-root; margin: 0.9em 0; padding: 0.45em 0.8em; border: 1px solid var(--rule); border-left-width: 5px; }
+.box.note { background: var(--note-bg); border-color: var(--note-rule); }
+.box.tip { background: var(--tip-bg); border-color: var(--tip-rule); }
+.box.warning { background: var(--warn-bg); border-color: var(--warn-rule); }
+.status { font-size: 0.8rem; color: var(--muted); border: 1px solid var(--rule); background: var(--panel); padding: 0 0.4em; white-space: nowrap; font-weight: normal; vertical-align: 0.15em; margin-left: 0.4em; }
+
+code, pre { font-family: monospace; font-size: 0.93em; font-variant-ligatures: none; }
+code { background: var(--code-bg); padding: 0.05em 0.25em; }
+pre { background: var(--code-bg); border: 1px solid var(--code-rule); padding: 0.8em 1em; overflow-x: auto; line-height: 1.4; white-space: pre; }
+
+/* Tables (the MediaWiki "wikitable") */
+.scroll { overflow-x: auto; margin: 0.8em 0 1em; }
+table { border-collapse: collapse; background: var(--panel); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+th, td { border: 1px solid var(--rule); padding: 0.25em 0.55em; text-align: left; vertical-align: top; }
+th { background: var(--panel-head); }
+td.r, th.r { text-align: right; white-space: nowrap; }
+caption { caption-side: bottom; text-align: left; font-size: 0.85rem; color: var(--muted); padding-top: 0.3em; }
+tr.total td { font-weight: bold; }
+table.wide { min-width: 40rem; }
+
+/* Thumbnails for images and videos */
+.thumb { margin: 0.4em 0 1em; padding: 4px; background: var(--panel); border: 1px solid var(--rule); font-size: 0.85rem; color: var(--muted); }
+.thumb img, .thumb video { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: #000; }
+.thumb figcaption { padding: 0.35em 0.15em 0.1em; line-height: 1.4; }
+.thumb figcaption b { color: var(--text); }
+figure.thumb { margin-inline: 0; }
+.tright { float: right; clear: right; width: 360px; margin-left: 1.4em; }
+.gallery { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 0.6em 0 1em; }
+.gallery .thumb { margin: 0; }
+.clear { clear: both; }
+
+footer { clear: both; margin-top: 3em; padding-top: 0.8em; border-top: 1px solid var(--rule); font-size: 0.8rem; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .page { display: block; }
+  .toc { position: static; max-height: none; display: inline-block; padding: 0.6em 1em; margin-top: 1rem; background: var(--panel); border: 1px solid var(--rule); }
+  .tright, .related { float: none; width: auto; margin-left: 0; }
+}

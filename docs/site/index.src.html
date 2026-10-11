@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Firefighter robot</title>
+<meta name="description" content="Progress of the firefighter robot built on the Berkeley Humanoid Lite legs: body, payload, walking, hardware, aiming software and a test platform for vision.">
+<link rel="stylesheet" href="wiki.css">
+</head>
+<body>
+<header class="topbar"><div>
+  <a class="name" href="./">Firefighter robot</a>
+  <nav><a href="./" aria-current="page">Progress</a><a href="concepts/">Body concepts</a><a href="#files">Files</a><a href="https://github.com/promaaa/vision-sobang">Code</a></nav>
+</div></header>
+
+<div class="page">
+<nav class="toc" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#top">(Top)</a></li>
+    <li><a href="#status"><span class="n">1</span>Status</a></li>
+    <li><a href="#concepts"><span class="n">2</span>Body concepts</a></li>
+    <li><a href="#payload"><span class="n">3</span>Payload on the legs</a></li>
+    <li><a href="#walking"><span class="n">4</span>Walking</a>
+      <ol>
+        <li><a href="#official"><span class="n">4.1</span>Official policy with a payload</a></li>
+        <li><a href="#closed-loop"><span class="n">4.2</span>Closed loop: see, walk, aim, spray</a></li>
+        <li><a href="#heat"><span class="n">4.3</span>Torque limit and motor heat</a></li>
+        <li><a href="#our-policy"><span class="n">4.4</span>Our policy</a></li>
+        <li><a href="#turn"><span class="n">4.5</span>A policy that turns on the spot</a></li>
+      </ol></li>
+    <li><a href="#hardware"><span class="n">5</span>Hardware</a>
+      <ol>
+        <li><a href="#pan-tilt"><span class="n">5.1</span>Pan-tilt module</a></li>
+        <li><a href="#adapters"><span class="n">5.2</span>Adapters, splash guard and backpack</a></li>
+        <li><a href="#bench"><span class="n">5.3</span>Bench rig</a></li>
+        <li><a href="#parts"><span class="n">5.4</span>Parts list</a></li>
+        <li><a href="#wiring"><span class="n">5.5</span>Power and wiring</a></li>
+      </ol></li>
+    <li><a href="#software"><span class="n">6</span>Software</a>
+      <ol>
+        <li><a href="#overview"><span class="n">6.1</span>Overview</a></li>
+        <li><a href="#interface"><span class="n">6.2</span>Detector interface</a></li>
+        <li><a href="#aiming"><span class="n">6.3</span>Aiming code</a></li>
+        <li><a href="#drivers"><span class="n">6.4</span>Actuator drivers</a></li>
+      </ol></li>
+    <li><a href="#vision"><span class="n">7</span>Test platform for vision</a>
+      <ol>
+        <li><a href="#camera-views"><span class="n">7.1</span>Camera views</a></li>
+        <li><a href="#fire-scenes"><span class="n">7.2</span>Synthetic fire scenes</a></li>
+        <li><a href="#camera-loop"><span class="n">7.3</span>Camera in the loop</a></li>
+        <li><a href="#scenarios"><span class="n">7.4</span>Test scenarios</a></li>
+        <li><a href="#sil"><span class="n">7.5</span>Software in the loop</a></li>
+      </ol></li>
+    <li><a href="#decisions"><span class="n">8</span>Decisions for the team</a></li>
+    <li><a href="#next"><span class="n">9</span>Next steps</a></li>
+    <li><a href="#files"><span class="n">10</span>Files</a></li>
+  </ol>
+</nav>
+
+<article id="top">
+<h1>Firefighter robot</h1>
+<p class="subtitle">Progress report. Last edited on 11 October 2026. The results date from 8 to 10 October 2026.</p>
+
+<div class="related">
+  <b>Related articles</b>
+  <ul>
+    <li><a href="concepts/">Body concepts A to E</a></li>
+    <li><a href="https://github.com/HybridRobotics/berkeley-humanoid-lite-assets">Berkeley Humanoid Lite assets</a></li>
+  </ul>
+</div>
+
+<p>The firefighter robot walks to a small fire and puts it out with water. It uses the legs and the torso frame of the open-source <a href="https://github.com/HybridRobotics/berkeley-humanoid-lite-assets">Berkeley Humanoid Lite</a>. A water gun or a small pump sits on top.</p>
+<p>This page collects the work outside vision: the body, the payload, walking, the hardware, the aiming software and a test platform for the fire detector. Marc works on the fire detector, so this work stops at the interface to his detector.</p>
+
+<div class="box note"><b>Note:</b> Nothing on this page is built or measured on the robot yet. Every result comes from simulation, CAD or research. Each section gives its status with one of these words: <i>built</i>, <i>tested in simulation</i>, <i>measured on laptop</i>, <i>measured on board</i>, <i>planned</i>.</div>
+
+<h2 id="status">Status</h2>
+<div class="scroll"><table class="wide">
+<tr><th>Work package</th><th>Status</th><th>Main result</th><th>Folder</th></tr>
+<tr><td><a href="#concepts">Body concepts</a></td><td>planned</td><td>Five concepts on the same legs. Concept A, a water gun on a pan-tilt, is the suggested first build.</td><td><code>cad/</code></td></tr>
+<tr><td><a href="#payload">Payload on the legs</a></td><td>tested in simulation</td><td>The worst leg torque for A with the real CAD parts is 5.2 Nm. The policy limit is 6 Nm.</td><td><code>sim/payload/</code></td></tr>
+<tr><td><a href="#official">Official walking policy</a></td><td>tested in simulation</td><td>No fall with any payload at 6 Nm. At 4 Nm, concept B with a full bottle falls in under 1 s.</td><td><code>sim/sim2sim/</code></td></tr>
+<tr><td><a href="#closed-loop">Closed loop</a></td><td>tested in simulation</td><td>The robot found the fire, walked, aimed and put it out from 1.9 m. It did not fall.</td><td><code>sim/sim2sim/</code></td></tr>
+<tr><td><a href="#turn">Our walking policy</a></td><td>tested in simulation</td><td>It turns on the spot at 0.39 rad/s. It is slower and less robust than the official policy.</td><td><code>sim/rl/</code></td></tr>
+<tr><td><a href="#hardware">Printable parts</a></td><td>planned</td><td>25 parts with STEP and STL files: pan-tilt in 2 versions, adapters, splash guard, backpack and bench rig.</td><td><code>cad/parts/</code>, <code>cad/backpack/</code>, <code>cad/bench/</code></td></tr>
+<tr><td><a href="#parts">Parts list</a></td><td>planned</td><td>463,273 KRW plus Waveshare shipping. The lab limit is 500,000 KRW.</td><td><code>docs/hardware/</code></td></tr>
+<tr><td><a href="#software">Aiming code and drivers</a></td><td>tested in simulation</td><td>45 tests pass. Nobody has run the code on real servos, a Pico or the robot.</td><td><code>aim/</code>, <code>actuators/</code></td></tr>
+<tr><td><a href="#vision">Vision test platform</a></td><td>tested in simulation</td><td>270 synthetic samples, a camera-in-the-loop simulator and six test scenarios. All scenarios pass.</td><td><code>sim/firescenes/</code>, <code>sim/sim2sim/</code></td></tr>
+</table></div>
+
+<h2 id="concepts">Body concepts <span class="status">planned</span></h2>
+<figure class="thumb">
+  <a href="concepts/lineup.jpg"><img src="concepts/lineup.jpg" width="2000" height="1000" alt="Five robot concepts side by side on the same legs" loading="lazy"></a>
+  <figcaption>From left to right: A water gun turret, B backpack pump, C arm lance, D sealed shell, E tethered hose. Legs and torso are the real Berkeley meshes.</figcaption>
+</figure>
+<figure class="thumb tright">
+  <video controls muted loop playsinline preload="none" poster="concept_A_module_poster.jpg" width="1280" height="720"><source src="concept_A_module.mp4" type="video/mp4"></video>
+  <figcaption>Concept A with the printed module (ST3215 version) and a stand-in gun.</figcaption>
+</figure>
+<p>All five concepts keep the Berkeley legs and torso frame. They differ in the water source, the aiming method and what sits on top of the hips. The <a href="concepts/">Body concepts</a> article describes each concept with renders.</p>
+<div class="scroll"><table class="wide">
+<tr><th>Concept</th><th>Water</th><th>Aim</th><th class="r">Added mass</th><th>Build effort</th></tr>
+<tr><td>A Water gun turret</td><td>Gun tank, about 0.5 L</td><td>Pan-tilt, 2 servos</td><td class="r">~1.4 kg</td><td>Low</td></tr>
+<tr><td>B Backpack pump</td><td>Tank and 12 V pump on the back</td><td>Head pan-tilt, 2 servos</td><td class="r">~2.7 kg</td><td>Medium</td></tr>
+<tr><td>C Arm lance</td><td>1 L tank and pump</td><td>Right arm, 5 motors</td><td class="r">~7.3 kg</td><td>High</td></tr>
+<tr><td>D Sealed shell</td><td>About 1 L inside</td><td>Whole body</td><td class="r">~2.3 kg</td><td>Medium to high</td></tr>
+<tr><td>E Tethered hose</td><td>External, no limit</td><td>Pan-tilt, 2 servos</td><td class="r">~1.0 kg</td><td>Low to medium</td></tr>
+<caption>Added masses are first estimates. For C, they include 5.0 kg of arms.</caption>
+</table></div>
+<p>We suggest concept A first, because it needs the least new work. The gun keeps its own tank and pump, and a relay switches its trigger. The same deck and 40 mm hole pattern can later take the camera head of B or the valve of E. The pump of concept B is the upgrade for range and flow.</p>
+<div class="clear"></div>
+
+<h2 id="payload">Payload on the legs <span class="status">tested in simulation</span></h2>
+<p>We built MuJoCo models of the robot with the payload of each concept. We then computed the joint torques in slow poses with inverse dynamics. One-leg stance gives the highest torque, and it happens in every step.</p>
+<div class="scroll"><table>
+<tr><th>Model</th><th class="r">Peak torque, one-leg stance</th></tr>
+<tr><td>Biped, no payload</td><td class="r">4.3 Nm</td></tr>
+<tr><td>A, first estimate</td><td class="r">5.9 Nm</td></tr>
+<tr><td>A, real CAD parts</td><td class="r">5.2 Nm</td></tr>
+<tr><td>B, first estimate</td><td class="r">3.6 Nm</td></tr>
+<tr><td>B, real CAD parts, full bottle</td><td class="r">3.9 Nm</td></tr>
+<tr><td>D</td><td class="r">6.0 Nm</td></tr>
+<tr><td>E, 20 N hose pull</td><td class="r">5.2 Nm</td></tr>
+<tr><td>C, with arms</td><td class="r">11.6 Nm</td></tr>
+<caption>Pitch joints. The walking policy limit is 6 Nm. The motor model allows 20 Nm.</caption>
+</table></div>
+<ul>
+  <li>No concept reaches the 20 Nm motor limit in any slow pose.</li>
+  <li>A and D sit at the 6 Nm policy limit. C, with arms, is far above it.</li>
+  <li>With the real CAD parts, A drops to 5.2 Nm. Its gun now sits behind the tilt axis.</li>
+  <li>Mass behind the torso costs less torque. 2 kg at x = −0.15 m costs 3–4 Nm. At x = +0.15 m it costs 8–9 Nm. Height matters little.</li>
+  <li>The budget before 6 Nm is about 2 kg on the torso top, or 5.5 kg in the backpack zone.</li>
+  <li>When the bottle empties, the centre of mass moves forward by about 1 cm.</li>
+</ul>
+<figure class="thumb">
+  <a href="p_place.png"><img src="p_place.png" width="1482" height="773" alt="Heat maps of torque and push recovery for a 2 kg mass at different positions" loading="lazy"></a>
+  <figcaption>A 2 kg mass moved over a grid: peak torque (left) and push recovery (right). Negative x is behind the torso.</figcaption>
+</figure>
+<div class="box note"><b>Note:</b> One-leg stance is a slow upper bound. The real gait sways and keeps each foot on the ground for a short time only.</div>
+
+<h2 id="walking">Walking</h2>
+<h3 id="official">Official policy with a payload <span class="status">tested in simulation</span></h3>
+<p>The Berkeley team ships trained walking policies. We ran <code>policy_biped_25hz_a.onnx</code> in our own MuJoCo loop with the payload models. Each test lasted 20 s.</p>
+<div class="gallery">
+  <figure class="thumb">
+    <video controls muted loop playsinline preload="none" poster="s2s_best_poster.jpg" width="640" height="480"><source src="s2s_best.mp4" type="video/mp4"></video>
+    <figcaption>Concept A walks a turn at 6 Nm (0.2 m/s and 0.5 rad/s).</figcaption>
+  </figure>
+  <figure class="thumb">
+    <video controls muted loop playsinline preload="none" poster="s2s_worst_poster.jpg" width="640" height="480"><source src="s2s_worst.mp4" type="video/mp4"></video>
+    <figcaption>Concept B with a full bottle falls at 4 Nm.</figcaption>
+  </figure>
+</div>
+<ul>
+  <li>At 6 Nm, no model fell in any test. B with a full bottle walks slowly, at 0.11–0.16 m/s.</li>
+  <li>At 4 Nm, the default of the Berkeley runtime, B with a full bottle falls in under 1 s. We must run the robot at 6 Nm.</li>
+  <li>The policy does not turn on the spot. For 0.5 rad/s asked, it turns at 0.06 rad/s. With 0.2 m/s forward, the turn works.</li>
+  <li>Below 0.25 m/s the policy often stands still. So the aiming code walks at 0.25 m/s or faster.</li>
+</ul>
+<div class="box warning"><b>Warning:</b> The simulation has no motor model, no delay and no IMU error. The real robot will do worse.</div>
+
+<h3 id="closed-loop">Closed loop: see, walk, aim, spray <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright">
+  <video controls muted loop playsinline preload="none" poster="closed_loop_A_poster.jpg" width="640" height="480"><source src="closed_loop_A.mp4" type="video/mp4"></video>
+  <figcaption>Official policy and our aiming code. Concept A with the real parts, fire behind and to the right.</figcaption>
+</figure>
+<p>We joined the official policy at 6 Nm, our aiming code and concept A with the real CAD parts in one MuJoCo run.</p>
+<ul>
+  <li>A virtual camera on the gun makes noisy detections at 10 Hz.</li>
+  <li>The fire sat 2 m behind and 1.5 m to the right. The aiming code walked an arc to find it. It then aimed with the pan-tilt.</li>
+  <li>The robot sprayed at 15.3 s, 1.9 m from the fire. The fire went out. The robot did not fall.</li>
+</ul>
+<figure class="thumb clear">
+  <a href="closed_loop_A_plot.png"><img src="closed_loop_A_plot.png" width="1200" height="500" alt="Robot path and controller states during the closed-loop run" loading="lazy"></a>
+  <figcaption>Robot path (left) and controller states (right) for the same run.</figcaption>
+</figure>
+
+<h3 id="heat">Torque limit and motor heat <span class="status">tested in simulation</span></h3>
+<div class="scroll"><table>
+<tr><th>Quantity, walking at 6 Nm, A and B with real parts</th><th class="r">Value</th></tr>
+<tr><td>Highest RMS joint torque</td><td class="r">3.8 Nm</td></tr>
+<tr><td>Copper loss per motor (estimate from the Berkeley resistance and torque constant)</td><td class="r">0.4–2.4 W</td></tr>
+<tr><td>Time a joint is above 4 Nm</td><td class="r">47 %</td></tr>
+</table></div>
+<ul>
+  <li>At 4 Nm, concept A falls after 4.5 s and concept B after 0.9 s. So 4 Nm is not an option with a payload.</li>
+  <li>The hottest joint is the ankle pitch, with up to 4.4 Nm RMS when standing. Hip yaw and hip roll come next.</li>
+</ul>
+<div class="box warning"><b>Warning:</b> No source gives a continuous torque or a thermal limit for the Berkeley actuator. The heat in the printed gearbox is unknown. Before the robot walks with a payload, run a 2-minute walking test at 6 Nm and log the motor temperatures.</div>
+
+<h3 id="our-policy">Our policy <span class="status">tested in simulation</span></h3>
+<p>We trained our own policy with MuJoCo Playground on the RTX 3090. During training, a payload of 0 to 2.5 kg sits on the torso. Each run took 16 to 37 min.</p>
+<div class="gallery">
+  <figure class="thumb">
+    <video controls muted loop playsinline preload="none" poster="rl_walk_poster.jpg" width="640" height="480"><source src="rl_walk_6nm.mp4" type="video/mp4"></video>
+    <figcaption>Our policy walks with 1.5 kg at 6 Nm.</figcaption>
+  </figure>
+  <figure class="thumb">
+    <a href="rl_curves.png"><img src="rl_curves.png" width="840" height="480" alt="Reward curves of the training runs" loading="lazy"></a>
+    <figcaption>Reward during the training runs.</figcaption>
+  </figure>
+</div>
+<div class="scroll"><table>
+<tr><th>Training setup</th><th class="r">0 kg</th><th class="r">1.5 kg</th><th class="r">3.5 kg</th></tr>
+<tr><td>6 Nm, payload 0–2.5 kg</td><td class="r">29 %</td><td class="r">42 %</td><td class="r">59 %</td></tr>
+<tr><td>6 Nm, payload 0–3.5 kg, knee ≤ 1.4 rad</td><td class="r">43 %</td><td class="r">48 %</td><td class="r">61 %</td></tr>
+<tr><td>20 Nm, payload 0–2.5 kg</td><td class="r">1 %</td><td class="r">3 %</td><td class="r">10 %</td></tr>
+<caption>Episodes that end in a fall with random pushes, by test payload.</caption>
+</table></div>
+<ul>
+  <li>Without pushes, the policies walk at 0.3 m/s with 0–2 % falls.</li>
+  <li>More torque helps far more than wider training ranges. We must learn the real motor limit.</li>
+</ul>
+<div class="box note"><b>Note:</b> The Berkeley action scale (0.25) gave a policy that only stood. We used the Playground value (0.5).</div>
+
+<h3 id="turn">A policy that turns on the spot <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright">
+  <video controls muted loop playsinline preload="none" poster="rl_turn_poster.jpg" width="640" height="480"><source src="rl_turn.mp4" type="video/mp4"></video>
+  <figcaption>Our new policy turns on the spot. Concept A with the real parts, 6 Nm.</figcaption>
+</figure>
+<p>We trained a second policy with the same interface as the official policy: 45 inputs, 12 outputs, 25 Hz. Its ONNX file can replace theirs. We tested both with the same harness, with the training noise on.</p>
+<div class="scroll"><table>
+<tr><th>Concept A, real parts, 6 Nm</th><th class="r">Ours</th><th class="r">Official</th></tr>
+<tr><td>Walk, 0.25 m/s asked</td><td class="r">0.15 m/s</td><td class="r">0.23 m/s</td></tr>
+<tr><td>Turn on the spot, 0.5 rad/s asked</td><td class="r">0.39 rad/s</td><td class="r">0.04 rad/s</td></tr>
+<tr><td>Walk and turn (m/s, rad/s)</td><td class="r">0.17, 0.44</td><td class="r">0.23, 0.48</td></tr>
+<tr><td>Falls with pushes, of 10</td><td class="r">8–9</td><td class="r">5–7</td></tr>
+<tr><td>Concept B, 2.8 kg</td><td class="r">falls</td><td class="r">walks</td></tr>
+</table></div>
+<p>Our policy turns on the spot, which the official policy cannot do. But it walks slower, falls more under pushes and falls with concept B. It is not ready. The next step is a longer training with pushes and heavier payloads.</p>
+<div class="clear"></div>
+
+<h2 id="hardware">Hardware</h2>
+<h3 id="pan-tilt">Pan-tilt module <span class="status">planned</span></h3>
+<div class="gallery">
+  <figure class="thumb"><a href="parts_exploded.jpg"><img src="parts_exploded.jpg" width="900" height="1200" alt="Exploded view of the pan-tilt module" loading="lazy"></a><figcaption>DS3218 version, exploded.</figcaption></figure>
+  <figure class="thumb"><a href="parts_sts.jpg"><img src="parts_sts.jpg" width="900" height="900" alt="Pan-tilt module with ST3215 bus servos" loading="lazy"></a><figcaption>ST3215 bus-servo version.</figcaption></figure>
+  <figure class="thumb"><a href="parts_A_real.jpg"><img src="parts_A_real.jpg" width="900" height="1125" alt="Concept A with the printed module on the robot" loading="lazy"></a><figcaption>Concept A with the module and a stand-in gun.</figcaption></figure>
+</div>
+<ul>
+  <li>The deck bolts to the two 2020 rails of the torso top, at x = ±60 mm, with 4 M5 T-nuts.</li>
+  <li>The pan axis turns on a 6808 bearing, so the servo carries no load.</li>
+  <li>The gun centre of mass is 22 mm behind the tilt axis, at x = −0.060 m.</li>
+  <li>The ST3215 version uses 312 g of PLA. Its servos report their position and load.</li>
+  <li>The 4 × M4 hole pattern on a 40 mm square can later take the camera head of B or the valve of E.</li>
+</ul>
+
+<h3 id="adapters">Adapters, splash guard and backpack <span class="status">planned</span></h3>
+<div class="gallery">
+  <figure class="thumb"><a href="parts_adapters.jpg"><img src="parts_adapters.jpg" width="1200" height="857" alt="Camera head for B and valve holder for E" loading="lazy"></a><figcaption>Camera head for B and valve holder for E.</figcaption></figure>
+  <figure class="thumb"><a href="bp_front.jpg"><img src="bp_front.jpg" width="800" height="1000" alt="Splash guard on the robot" loading="lazy"></a><figcaption>Splash guard.</figcaption></figure>
+  <figure class="thumb"><a href="bp_rear.jpg"><img src="bp_rear.jpg" width="800" height="1000" alt="Backpack with bottle and pump" loading="lazy"></a><figcaption>Backpack, 2.3 kg when full.</figcaption></figure>
+</div>
+<ul>
+  <li>The B head puts the nozzle 62 mm under the cameras, so the nozzle never blocks the image.</li>
+  <li>The backpack holds a 1 L Nalgene bottle and a Seaflo 12 V pump.</li>
+</ul>
+<div class="box warning"><b>Warning:</b> With the backpack, set a software knee limit of 1.4 rad. Otherwise the lower leg can touch the backpack.</div>
+
+<h3 id="bench">Bench rig <span class="status">planned</span></h3>
+<figure class="thumb tright">
+  <video controls muted loop playsinline preload="none" poster="bench_rig_poster.jpg" width="1280" height="720"><source src="bench_rig.mp4" type="video/mp4"></video>
+  <figcaption>Bench rig, one full turn.</figcaption>
+</figure>
+<p>The bench rig lets us test the module, the water and the aiming before the robot walks.</p>
+<ul>
+  <li>Two 140 mm 2020 rails at x = ±60 mm take the same deck as the robot.</li>
+  <li>The base clamps to a table or sits on a tripod (1/4"-20). A tray holds the bottle and the pump. A box holds the electronics and the e-stop.</li>
+  <li>The tipping margin is 50 mm or more with the gun turned and a full bottle.</li>
+  <li>The rig uses about 988 g of PLA.</li>
+</ul>
+<p>The test plan is in <code>cad/bench/README.md</code>:</p>
+<ol>
+  <li>Calibrate the servos.</li>
+  <li>Measure the jet speed.</li>
+  <li>Align the camera with the nozzle.</li>
+  <li>Aim at paper targets.</li>
+  <li>Put out a small fire outdoors.</li>
+</ol>
+<div class="clear"></div>
+
+<h3 id="parts">Parts list <span class="status">planned</span></h3>
+<p>The parts list covers the water system, the aiming and the safety parts. The lab pays. 3D-printed parts cost nothing, because the lab has printers. The lab already has the motors and all other parts of the Berkeley robot. The cameras belong to the vision budget.</p>
+<p>The total is 463,273 KRW with VAT, plus the Waveshare shipping. The lab limit is 500,000 KRW.</p>
+<!--BOM-SUMMARY-->
+<!--BOM-->
+<div class="box note"><b>Note:</b> Prices change. Most prices were checked on 9 October 2026. The Devicemart site refused connections on that day, so its prices date from 8 October. The Waveshare prices are USD prices × 1,400. The original list, in French, is <code>docs/hardware/bom_extinction.csv</code>.</div>
+
+<h3 id="wiring">Power and wiring <span class="status">planned</span></h3>
+<figure class="thumb">
+  <a href="wiring.png"><img src="wiring.png" width="4765" height="1596" alt="Wiring diagram for concept A" loading="lazy"></a>
+  <figcaption>Wiring for concept A. Open the image for full size.</figcaption>
+</figure>
+<p>Power comes from the robot's 24 V bus through a 10 A fuse, an e-stop relay and a 24 V to 12 V converter. The e-stop cuts all add-on power. It does not stop the leg motors.</p>
+<pre># Pico 2 pins
+GP14 -&gt; relay IN1   water-gun trigger
+GP15 -&gt; relay IN2   12 V pump
+GP16 &lt;- e-stop NC   open = stop
+
+# Servo ids
+1 = pan, 2 = tilt</pre>
+
+<h2 id="software">Software</h2>
+<h3 id="overview">Overview <span class="status">tested in simulation</span></h3>
+<pre>
+<!--DIAGRAM-->
+</pre>
+<p>Every message is one JSON line over UDP on the robot computer. The detector sends only pixel positions and boxes. The aiming code computes the fire position, the jet angles and the walk command.</p>
+
+<h3 id="interface">Detector interface</h3>
+<p>Version 1, the current interface: the detector sends one JSON line for each fire and frame to <code>127.0.0.1:5600</code>.</p>
+<pre>{"timestamp": 12345.678, "camera": "rgb", "u": 331.5, "v": 298.0,
+ "bbox": [310, 280, 352, 316], "confidence": 0.87,
+ "max_temp_c": null, "depth_m": null}</pre>
+<p>The timestamp is <code>time.monotonic()</code> on the robot computer at the time of the image.</p>
+<p>Version 2, a proposal: the detector sends one frame message for each camera image, also when it sees no fire. An empty list means that the image has no fire.</p>
+<pre>{"timestamp": 12345.678, "camera": "rgb", "frame": true,
+ "detections": [{"u": 331.5, "v": 298.0, "bbox": [310, 280, 352, 316], "confidence": 0.87}]}</pre>
+<p>With version 1, <code>aim/run.py</code> cannot tell "no fire in this image" from "the image is late". The software-in-the-loop test found 9 to 24 % of controller ticks without a new image. <code>aim/run.py</code> accepts both versions.</p>
+<p>Questions for Marc:</p>
+<ul>
+  <li><b>Q1.</b> Does the detector correct the lens distortion?</li>
+  <li><b>Q2.</b> Which point is (u, v): the box centre, the hottest pixel or the base of the flame? The aiming code assumes that the fire touches the floor at (u, v).</li>
+  <li><b>Q3.</b> Which cameras, image sizes and fields of view do you use?</li>
+  <li><b>Q4.</b> What frame rate and what delay does the detector have?</li>
+  <li><b>Q5.</b> Can the detector send one frame message for each image (version 2)?</li>
+</ul>
+
+<h3 id="aiming">Aiming code <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright" style="width: 300px">
+  <a href="aim_demo.png"><img src="aim_demo.png" width="880" height="1430" alt="Top view of a toy simulation: the robot turns, walks and sprays" loading="lazy"></a>
+  <figcaption>Toy simulation of concept A.</figcaption>
+</figure>
+<p>The aiming code starts where the detector stops. It finds the fire on the floor, walks closer, aims the jet and decides when to spray.</p>
+<ul>
+  <li>The states are search, approach, aim, spray, check and done.</li>
+  <li>A Kalman filter smooths the fire position and rejects outliers.</li>
+  <li>The jet solver allows for the nozzle offset and, if wanted, air drag. It takes 0.35 ms (measured on laptop).</li>
+  <li>The code uses the pan-tilt angles at the time of the image. A 100 ms delay then gives 0.25 mm of error instead of 9 cm.</li>
+  <li>It sprays only with a recent, confident detection inside the jet range.</li>
+  <li>An interlock stops the pump above 15° of torso tilt or 30°/s of tilt rate.</li>
+  <li>35 tests pass.</li>
+</ul>
+<div class="box tip"><b>Tip:</b> You can test without a camera. <code>aim/send_test_detections.py</code> sends fake detections to <code>aim/run.py</code>.</div>
+<div class="clear"></div>
+
+<h3 id="drivers">Actuator drivers <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright">
+  <a href="selftest.jpg"><img src="selftest.jpg" width="1029" height="595" alt="Terminal output of the self-test in mock mode" loading="lazy"></a>
+  <figcaption>Self-test in mock mode. The same 7 checks run on the first day with the real parts.</figcaption>
+</figure>
+<dl>
+  <dt><code>st3215.py</code></dt><dd>Driver for the Feetech STS servos. The tests use the packet examples from the Feetech manual.</dd>
+  <dt><code>pico_fw/main.py</code></dt><dd>Relay firmware for the Pico 2. The gun and the pump switch off after 0.5 s without a message, or when the e-stop opens.</dd>
+  <dt><code>actuator_node.py</code></dt><dd>Sends the aim commands to the servos and relays. Sends the measured angles back on UDP 5603. A mock mode runs without hardware.</dd>
+  <dt><code>walk_bridge.py</code></dt><dd>Replaces the Berkeley gamepad input. Sends a zero command after 0.5 s without a message.</dd>
+  <dt><code>selftest.py</code></dt><dd>7 checks for the first day with the parts: ports, servos, relays, watchdog, e-stop and UDP. It asks before every move.</dd>
+</dl>
+<p>The full chain runs in mock mode: test detections, aiming, actuators, then done after 3.3 s of water. 10 tests pass.</p>
+<div class="box note"><b>Note:</b> Nobody has run the drivers on real servos, a Pico or the robot yet.</div>
+<div class="clear"></div>
+
+<h2 id="vision">Test platform for vision</h2>
+<p>We have no robot and no bench to test the fire detector on yet. These tools let Marc test the detector with the aiming code before the hardware exists.</p>
+
+<h3 id="camera-views">Camera views <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright">
+  <a href="cam_round2.jpg"><img src="cam_round2.jpg" width="1296" height="1580" alt="Camera views before and after the pose change" loading="lazy"></a>
+  <figcaption>Camera views before and after the recommended pose change, 90° lens.</figcaption>
+</figure>
+<p>We rendered the view of each robot camera in a test room with fires at 1, 2, 3 and 5 m. We also computed how many pixels a 20 cm fire covers for each sensor.</p>
+<div class="scroll"><table>
+<tr><th>Sensor</th><th class="r">1 m</th><th class="r">3 m</th><th class="r">5 m</th><th class="r">8 m</th></tr>
+<tr><td>MLX90640, 55°, 32 × 24</td><td class="r">6 × 10</td><td class="r">2 × 3</td><td class="r">1 × 2</td><td class="r">1 × 1</td></tr>
+<tr><td>Lepton 3.5, 160 × 120</td><td class="r">30 × 37</td><td class="r">10 × 12</td><td class="r">6 × 7</td><td class="r">4 × 5</td></tr>
+<tr><td>256 × 192 USB thermal</td><td class="r">48 × 63</td><td class="r">16 × 21</td><td class="r">10 × 13</td><td class="r">6 × 8</td></tr>
+<tr><td>RGB 1280 × 720, 90°</td><td class="r">128 × 160</td><td class="r">43 × 53</td><td class="r">26 × 32</td><td class="r">16 × 20</td></tr>
+<caption>Size of a 20 cm fire in pixels (width × height).</caption>
+</table></div>
+<ul>
+  <li>Below about 3 × 3 pixels, detection gets unreliable. This is a rule of thumb, not a measured limit.</li>
+  <li>Small moves fix the view of concept A: the lens 4 cm to the side and 8 cm down, pitched 16° down. The floor is then visible from 0.8 m to 5 m.</li>
+  <li>A 60° lens cannot see the floor closer than about 0.9–1.0 m.</li>
+</ul>
+<div class="clear"></div>
+
+<h3 id="fire-scenes">Synthetic fire scenes <span class="status">tested in simulation</span></h3>
+<figure class="thumb">
+  <video controls muted loop playsinline preload="none" poster="fire_scenes_poster.jpg" width="1280" height="360"><source src="fire_scenes.mp4" type="video/mp4"></video>
+  <figcaption>A 10-second walk toward a fire: RGB (left) and thermal-like image (right).</figcaption>
+</figure>
+<ul>
+  <li>270 samples from the concept A camera pose: rooms and outdoor ground, 1–3 fires, lamps, people and smoke. 20 samples have the gun barrel in view.</li>
+  <li>Each sample has an RGB image (1280 × 720), a thermal-like image at 3 resolutions, YOLO boxes and the 3D fire position.</li>
+  <li>The projected fire centre falls inside its box in 98 % of the samples. The thermal values go up to 6553 K without clipping.</li>
+</ul>
+<figure class="thumb">
+  <a href="fire_sheet_crop.jpg"><img src="fire_sheet_crop.jpg" width="1600" height="739" alt="Grid of synthetic RGB and thermal image pairs with labels" loading="lazy"></a>
+  <figcaption>Synthetic samples: RGB and thermal-like pairs with their labels.</figcaption>
+</figure>
+<div class="box warning"><b>Warning:</b> This is not a real sensor model. It has no noise and no blur. Use it to test the pipeline, not to train the final detector.</div>
+<p>To make more samples, for example numbers 250 to 749:</p>
+<pre>blender -b --factory-startup -P sim/firescenes/firescenes.py -- samples 250 750</pre>
+
+<h3 id="camera-loop">Camera in the loop <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright">
+  <video controls muted loop playsinline preload="none" poster="camera_loop_poster.jpg" width="640" height="480"><source src="camera_loop.mp4" type="video/mp4"></video>
+  <figcaption>The gun turns to the fire. Top right: the robot camera with the detection box.</figcaption>
+</figure>
+<p>Every 100 ms the simulator renders the gun camera and calls <code>detect(image, t)</code>. The detector output goes to the aiming code, and the robot walks and sprays in MuJoCo.</p>
+<ul>
+  <li>The baseline detector is a colour threshold, not a real detector. With it, the robot sprayed at 6.9 s, and the jet landed 0.10 m from the fire. The robot did not fall.</li>
+  <li>The baseline made 39 false detections on a warm lamp and none on a red box. The aiming code could not place the lamp on the floor, so it did not spray.</li>
+  <li>The test found two aiming bugs. A second fire was ignored, and the tilt crept down while idle. We fixed both and added a test for each.</li>
+</ul>
+<p>To plug in a detector:</p>
+<ol>
+  <li>Write a Python file with a function <code>detect(rgb, t)</code> that returns a list of <code>FireDetection</code> (<code>aim/detection.py</code>).</li>
+  <li>Run the scenario suite with <code>--detector</code> and the path of that file.</li>
+</ol>
+<pre>MUJOCO_GL=egl sim/sim2sim/.venv/bin/python sim/sim2sim/camera_loop.py --quick --detector path/to/my_detector.py</pre>
+<pre>from detection import FireDetection  # camera_loop.py puts aim/ on the import path
+
+
+def detect(rgb, t):
+    """rgb: 480 x 640 x 3 uint8 RGB image of camera "rgb". t: time of the image, s."""
+    boxes = my_model(rgb)  # list of (u_min, v_min, u_max, v_max, score)
+    return [FireDetection(t, "rgb", (u0 + u1) / 2, v1, (u0, v0, u1, v1), score)
+            for u0, v0, u1, v1, score in boxes]</pre>
+<div class="box note"><b>Note:</b> The image is RGB, not BGR. OpenCV code must convert it with <code>cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)</code>. The camera intrinsics are fx = fy = 320 px, cx = 320 px and cy = 240 px.</div>
+
+<h3 id="scenarios">Test scenarios <span class="status">tested in simulation</span></h3>
+<figure class="thumb tright">
+  <video controls muted loop playsinline preload="none" poster="two_fires_poster.jpg" width="640" height="480"><source src="two_fires.mp4" type="video/mp4"></video>
+  <figcaption>Scenario "two fires": the robot puts out both.</figcaption>
+</figure>
+<div class="scroll"><table>
+<tr><th>Scenario</th><th>Result</th><th class="r">Fire out at</th></tr>
+<tr><td>Fire ahead, 2.5 m</td><td>pass</td><td class="r">7.3 s</td></tr>
+<tr><td>Fire behind and to the right</td><td>pass</td><td class="r">18.9 s</td></tr>
+<tr><td>Two fires</td><td>pass</td><td class="r">10.0 s and 38.3 s</td></tr>
+<tr><td>Lamp only, no fire</td><td>pass</td><td class="r">no spray</td></tr>
+<tr><td>Fire 0.5 m in front</td><td>pass</td><td class="r">7.0 s, one spray</td></tr>
+<tr><td>Fire 6 m away</td><td>pass</td><td class="r">38.7 s</td></tr>
+<caption>Baseline colour detector, concept A with the real parts.</caption>
+</table></div>
+<ul>
+  <li>All six scenarios run in 54 s with <code>--quick</code>. We run them after every change to the aiming code.</li>
+  <li>No run had a stray spray or a fall.</li>
+  <li>The "fire 0.5 m in front" case first needed 3 sprays. The robot now steps back 0.2 m further, and one spray is enough.</li>
+</ul>
+<div class="clear"></div>
+
+<h3 id="sil">Software in the loop <span class="status">tested in simulation</span></h3>
+<p>In the software-in-the-loop test, the real programs run as separate processes and talk over UDP, as on the robot. The simulator replaces only the camera, the legs and the servos.</p>
+<pre>MUJOCO_GL=egl sim/sim2sim/.venv/bin/python sim/sim2sim/camera_loop.py --sil --repeat 5</pre>
+<ul>
+  <li>The first runs found 4 integration problems: no robot pose input, loops out of step, no message for a frame without fire, and the torso tilt was ignored. We fixed all four.</li>
+  <li>After the fixes, "two fires" passed 5 of 5 runs and "fire ahead" 3 of 3. The jet landed 0.04–0.06 m from the fire. No packet was lost.</li>
+  <li>The pump runs during 79–86 % of the spray time. The interlock stops it during the rest.</li>
+</ul>
+<div class="box warning"><b>Warning:</b> All programs ran on one computer. A detector on another computer has a different clock, and <code>aim/run.py</code> then rejects every message. This case is not tested.</div>
+
+<h2 id="decisions">Decisions for the team</h2>
+<div class="scroll"><table>
+<tr><th>ID</th><th>Topic</th><th>Question</th></tr>
+<tr><td>D1</td><td>Concept</td><td>A first, with B as the upgrade on the same module?</td></tr>
+<tr><td>D2</td><td>Servo type</td><td>ST3215 bus servo (feedback, 12 V) or DS3218 hobby servo? Both CAD versions exist.</td></tr>
+<tr><td>D3</td><td>Torque limit</td><td>Run the robot at 6 Nm instead of the 4 Nm default? Check the motor heat first.</td></tr>
+<tr><td>D4</td><td>Order</td><td>Who sends the parts list to the lab, and when?</td></tr>
+<tr><td>D5</td><td>Computer</td><td>Detector and aiming code on the robot's N95 PC, or on a laptop over Wi-Fi?</td></tr>
+</table></div>
+
+<h2 id="next">Next steps</h2>
+<ol>
+  <li><b>Order.</b> Send the parts list. Print the module and the bench rig.</li>
+  <li><b>Assemble.</b> Wire the servos, the Pico, the relay and the e-stop. Flash the Pico.</li>
+  <li><b>Calibrate.</b> Set the servo zeros, measure the jet speed and align the camera with the nozzle.</li>
+  <li><b>Test on the bench.</b> Run the detector, the aiming code and the spray on paper targets. Then put out a small fire outdoors.</li>
+  <li><b>Robot.</b> Run the policy at 6 Nm with the payload. Do a first standing test.</li>
+</ol>
+<div class="box warning"><b>Warning:</b> Have the e-stop and the extinguisher ready before the first test with water or fire.</div>
+
+<h2 id="files">Files</h2>
+<p>All folders are in the <code>main</code> branch of the <a href="https://github.com/promaaa/vision-sobang">vision-sobang repository</a>. Each folder has a README with the method, the commands and the limits.</p>
+<div class="scroll"><table>
+<tr><th>Content</th><th>Folder</th></tr>
+<tr><td>Concept renders and Blender scripts</td><td><code>cad/</code>, <code>cad/renders/</code></td></tr>
+<tr><td>Printable parts (STEP, STL)</td><td><code>cad/parts/</code>, <code>cad/backpack/</code>, <code>cad/bench/</code></td></tr>
+<tr><td>Payload and policy simulations</td><td><code>sim/payload/</code>, <code>sim/sim2sim/</code>, <code>sim/rl/</code></td></tr>
+<tr><td>Aiming code and drivers</td><td><code>aim/</code>, <code>actuators/</code></td></tr>
+<tr><td>Vision test platform</td><td><code>cad/camera_views/</code>, <code>sim/firescenes/</code></td></tr>
+<tr><td>Parts list, wiring, Berkeley deployment notes</td><td><code>docs/hardware/</code>, <code>docs/locomotion/</code></td></tr>
+</table></div>
+
+<footer>
+  <p>This page was last edited on 11 October 2026.</p>
+  <p>Robot models and meshes: <a href="https://github.com/HybridRobotics/berkeley-humanoid-lite-assets">HybridRobotics/berkeley-humanoid-lite-assets</a>, licence CC BY-SA 4.0.</p>
+</footer>
+</article>
+</div>
+</body>
+</html>

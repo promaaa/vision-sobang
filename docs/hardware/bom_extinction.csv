@@ -1,0 +1,38 @@
+catégorie,article,qté,prix_unitaire_krw,total_krw,lien,boutique,statut_du_prix
+Eau,"Pompe à membrane 12 V Seaflo SFDP1-010-040-21 (3,8 L/min, 0,28 MPa), 1 + 1 de rechange",2,36300,72600,https://www.devicemart.co.kr/goods/view?no=14900780,Devicemart,prix du 2026-10-08 (Devicemart inaccessible le 09)
+Eau,Gourde Nalgene 1 L large ouverture (rentre dans le berceau imprimé),1,27000,27000,https://www.kolonmall.com/Brands/nalgene/Product/K1785991072708074NO01,Kolon Mall,vérifié 2026-10-09
+Eau,"Tuyau PVC tressé Ø int. 8 mm, au mètre",3,1100,3300,https://www.devicemart.co.kr/goods/view?no=14977698,Devicemart,prix du 2026-10-08 (Devicemart inaccessible le 09)
+Eau,Raccord laiton PT 1/4 mâle × cannelé 8 mm (tuyau → buse),2,1859,3718,https://www.navimro.com/g/335689/,NaviMall,vérifié 2026-10-09
+Eau,Manchon laiton PT 1/4 femelle-femelle,1,1529,1529,https://www.navimro.com/p/K03476839/,NaviMall,vérifié 2026-10-09
+Eau,Collier de serrage 8–12 mm,6,330,1980,https://www.navimro.com/g/1815238/,NaviMall,vérifié 2026-10-09
+Eau,"Buse à jet plein Sanga SJN02 PT 1/4, orifice 2 mm (lot de 10)",1,21989,21989,https://www.navimro.com/g/1873944/,NaviMall,vérifié 2026-10-09
+Eau,"Pistolet à eau électrique Daiso (~100 mL, premier essai)",1,5000,5000,https://www.daisomall.co.kr/pd/pdr/SCR_PDR_0001?pdNo=1075502,Daiso Mall,vérifié 2026-10-09
+Eau,Pistolet à eau électrique rechargeable 400 mL (démonstration),1,28040,28040,https://www.11st.co.kr/products/8376015562,11st,vérifié 2026-10-09
+Visée,"Servo bus série Waveshare ST3215 12 V (30 kg·cm), pan + tilt",2,29106,58212,https://www.waveshare.com/st3215-servo.htm?sku=22414,Waveshare (étranger),"estimation USD × 1 400, livraison non comprise"
+Visée,"Waveshare Bus Servo Adapter (A), USB → bus des servos",1,6986,6986,https://www.waveshare.com/bus-servo-adapter-a.htm,Waveshare (étranger),"estimation USD × 1 400, livraison non comprise"
+Visée,"Roulement 6808 (40 × 52 × 7 mm), axe de pan",1,17589,17589,https://www.navimro.com/g/263808/,NaviMall,vérifié 2026-10-09
+Visée,Écrous en T M5 pour profilé 2020 (lot de 100),1,25289,25289,https://www.navimro.com/g/1171729/,NaviMall,vérifié 2026-10-09
+Visée,Inserts filetés à chaud M3 × 4 mm (lot de 50),1,11880,11880,https://www.icbanq.com/P013153497,ICbanq,vérifié 2026-10-09
+Visée,Inserts laiton M4,20,341,6820,https://www.navimro.com/g/3238674/,NaviMall,vérifié 2026-10-09
+Électronique,"Convertisseur DC-DC 20–96 V → 12 V 10 A, étanche",1,31790,31790,https://www.icbanq.com/P017177777,ICbanq,vérifié 2026-10-09
+Électronique,Raspberry Pi Pico 2 (commande des relais),1,12100,12100,https://www.icbanq.com/P016314420,ICbanq,vérifié 2026-10-09
+Électronique,"Module relais 2 canaux 5 V (canal 1 : gâchette du pistolet, canal 2 : pompe)",1,1760,1760,https://www.icbanq.com/P014159954,ICbanq,vérifié 2026-10-09
+Électronique,Diode Schottky SB560 (roue libre de la pompe),5,374,1870,https://www.icbanq.com/P018607760,ICbanq,vérifié 2026-10-09
+Électronique,Hub USB 3.0 alimenté NEXT UH305,1,26300,26300,https://www.11st.co.kr/products/147859798,11st,vérifié 2026-10-09
+Électronique,"Wattmètre continu Adafruit 3626 (100 V, 20 A), pour mesurer le courant",1,29920,29920,https://www.icbanq.com/P013154253,ICbanq,vérifié 2026-10-09
+Sécurité,"Arrêt d'urgence 22 mm à accrochage, 2 NO + 2 NF (KSEP2260-22)",1,16280,16280,https://www.icbanq.com/P017196482,ICbanq,vérifié 2026-10-09
+Sécurité,"Relais de puissance bobine 24 V, 30 A",1,1760,1760,https://www.icbanq.com/P017177185,ICbanq,vérifié 2026-10-09
+Sécurité,Porte-fusible lame en ligne,1,792,792,https://www.icbanq.com/P017177814,ICbanq,vérifié 2026-10-09
+Sécurité,Fusible lame 10 A,5,495,2475,https://www.icbanq.com/P017180546,ICbanq,vérifié 2026-10-09
+Sécurité,Fusible lame 5 A,5,495,2475,https://www.icbanq.com/P017180544,ICbanq,vérifié 2026-10-09
+Sécurité,"Extincteur à poudre ABC 3,3 kg (pour les essais)",1,20889,20889,https://www.navimro.com/p/K10635246/,NaviMall,vérifié 2026-10-09
+Câblage,Paire de connecteurs XT30 (prise sur le bus 24 V du robot),5,1320,6600,https://www.icbanq.com/P017042347,ICbanq,vérifié 2026-10-09
+Câblage,Paire de connecteurs XT60,2,3190,6380,https://www.icbanq.com/P015645630,ICbanq,vérifié 2026-10-09
+Câblage,"Câble silicone 16 AWG, au mètre (2 m rouge + 2 m noir), + 2 800 de port",4,1250,5000,https://www.11st.co.kr/products/1609819039,11st,vérifié 2026-10-09
+Câblage,"Fiche jack DC 5,5 × 2,1 mm avec câble",2,550,1100,https://www.eleparts.co.kr/goods/view?no=3234130,Eleparts,vérifié 2026-10-09
+Câblage,Fils Dupont (65 pièces),1,1320,1320,https://www.icbanq.com/P019185392,ICbanq,vérifié 2026-10-09
+Câblage,Gaine thermorétractable (100 pièces),1,2530,2530,https://www.icbanq.com/P013044868,ICbanq,vérifié 2026-10-09
+Optionnel (hors total),Kit de fils 22 AWG UL1007,1,23100,23100,https://www.eleparts.co.kr/goods/view?no=7697222,Eleparts,vérifié 2026-10-09
+Optionnel (hors total),3e servo ST3215 de rechange,1,29106,29106,https://www.waveshare.com/st3215-servo.htm?sku=22414,Waveshare (étranger),estimation USD × 1 400
+Optionnel (hors total),ST3215 chez un vendeur coréen (si la commande à l'étranger pose problème),1,74789,74789,"https://www.navimro.com/p/K92852431/",NaviMall,vérifié 2026-10-09
+Optionnel (hors total),"Filtre en Y KITZ 3/8"" (entrée de pompe), lourd",1,45089,45089,https://www.navimro.com/g/390131/,NaviMall,vérifié 2026-10-09

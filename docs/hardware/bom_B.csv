@@ -1,0 +1,30 @@
+item,qty,unit_price_krw_or_usd,currency,link,accessed,notes
+"Serial bus servo Waveshare ST3215 (Feetech STS3215) 12 V version, pan and tilt",2,21.99,USD,https://www.waveshare.com/st3215-servo.htm?sku=22414,2026-10-08,6-12.6 V; 30 kg.cm at 12 V; stall 2.7 A; position/load/speed/voltage feedback; 12 V version is SKU 22414 at USD 21.99 (7.4 V version is USD 16.99); Korean shop for 12 V version not found
+"Waveshare Bus Servo Adapter (A), USB to servo bus",1,4.99,USD,https://www.waveshare.com/bus-servo-adapter-a.htm,2026-10-08,input 9-12.6 V; 5.5x2.1 mm DC jack
+Pan-tilt brackets,1,,,,,not found; plan to 3D-print in PLA like the BHL parts
+DC-DC buck 12 V 10 A SZH-PWSD-064,1,14300,KRW,https://www.devicemart.co.kr/goods/view?no=16084804,2026-10-08,input 15-90 V covers 6S LiPo 18-25.2 V; IP68; feeds servos (and pump or valve in B/E)
+Raspberry Pi Pico (MCU for relay switching),1,5940,KRW,https://www.devicemart.co.kr/goods/view?no=13921792,2026-10-08,USB to robot computer
+2-channel 5 V relay module with optocoupler,1,2310,KRW,https://www.devicemart.co.kr/goods/view?no=1327557,2026-10-08,10 A at 30 VDC; 3.3 V trigger from Pico unverified
+"E-stop button KGE-N4R2R 22 mm, push-lock turn-reset, 2 NO + 2 NC",1,12100,KRW,https://www.devicemart.co.kr/goods/view?no=10895014,2026-10-08,contact rating not found; switches the coil of the power relay
+"Power relay KKA-K4, 24 V coil, 40 A (switched by the e-stop)",1,7150,KRW,https://www.devicemart.co.kr/goods/view?no=14822397,2026-10-08,carries the add-on 24 V current
+ATO blade fuse holder 287,1,2420,KRW,https://www.devicemart.co.kr/goods/view?no=12170195,2026-10-08,inline type unverified
+Blade fuse set 10 pcs (10/15/20/25/30 A),1,2200,KRW,https://www.devicemart.co.kr/goods/view?no=1321122,2026-10-08,use 10 A at the 24 V tap; 5 A fuse URL not found
+XT30 connector pair for the BHL 24 V bus tap,1,,,,,not found; BHL uses XT30 taps on its main bus
+XT60 connector pair,1,1760,KRW,https://www.devicemart.co.kr/goods/view?no=1078005,2026-10-08,for the add-on box input
+"Silicone wire 16 AWG, 1 m red + 1 m black (DFRobot FIT0584)",2,6930,KRW,https://www.devicemart.co.kr/goods/view?no=16057418,2026-10-08,35 A rating per listing
+Dupont F/F jumper set,1,6270,KRW,https://www.devicemart.co.kr/goods/view?no=1386062,2026-10-08,signal wiring
+Powered USB hub,1,,,,,not found; BHL USB ports are used by 4 USB-CAN adapters
+Plastic enclosure IP65 for the add-on electronics,1,,,,,not found
+12 V diaphragm pump Seaflo SFDP1-010-040-21,1,36300,KRW,https://www.devicemart.co.kr/goods/view?no=14900780,2026-10-08,"3.8 L/min; 40 PSI (0.28 MPa); 4 A; price with VAT; about 1 week lead time; Seaflo 21 series, fits the printed pump bracket in cad/backpack"
+Flyback diode for the pump,1,,,,,not found
+Tank: Nalgene 32 oz (946 mL) wide-mouth bottle,1,,,https://well.ca/products/nalgene-32-ounce-wide-mouth-water_85490.html,2026-10-08,price not found; size 89 mm diameter x 210 mm from this listing per cad/backpack/README.md; the printed cradle fits this bottle
+Inlet filter,1,,,,,not found
+"PVC braided hose ID 8 mm OD 12 mm, per 1 m",2,1100,KRW,https://www.devicemart.co.kr/goods/view?no=14977698,2026-10-08,10 kgf/cm2 working pressure
+Push-fit fitting 8 mm tube to PT 3/8,2,770,KRW,https://www.devicemart.co.kr/goods/view?no=15357016,2026-10-08,
+Mini hose clamp SZH-CO004 for 8-12 mm hose,4,440,KRW,https://www.devicemart.co.kr/goods/view?no=10897015,2026-10-08,
+"Nozzle uxcell 304 stainless mist nozzle 1/4 inch BSPT, 2 mm orifice",1,19198,KRW,https://www.amazon.com/dp/B07W71Z27Z,2026-10-08,"1 piece per pack; Amazon price in KRW, without international shipping"
+Adapter 8 mm tube to 1/4 inch BSPT,1,,,,,not found
+"Printed PLA backpack: 2 brackets, plate, strapped bottle cradle, Seaflo 21-series pump bracket (cad/backpack)",1,,,,,filament price not found; about 502 g PLA estimated in cad/backpack/README.md
+"Backpack hardware: M5 drop-in T-nuts, M4 heat-set inserts, M4/M5 screws, nuts, 2 hook-and-loop straps (list in cad/backpack/README.md)",1,,,,,not found
+"USB RGB camera (Marc chooses, see README section 4)",1,,,,,excluded from total; example ELP-USBFHD01M-L180 USD 42.00
+"Thermal camera (Marc chooses, see README section 4)",1,,,,,"excluded from total; options from 88,000 KRW (MLX90640) to 572,660 KRW (Lepton 3.5 + PureThermal 3)"

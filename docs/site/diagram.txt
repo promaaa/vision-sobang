@@ -1,0 +1,9 @@
+cameras --images--> fire detector (Marc)
+                         |
+                         |  UDP 5600: detections
+                         v
+robot pose --UDP 5605--> aim/run.py --UDP 5601: pan, tilt, water--> actuator_node.py --> servos, pump, gun
+                         |    ^                                         |
+                         |    +------- UDP 5603: measured angles -------+
+                         |
+                         +--UDP 5602: vx, yaw rate--> walk_bridge.py --> Berkeley walking policy
