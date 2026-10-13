@@ -10,7 +10,7 @@
 <body>
 <header class="topbar"><div>
   <a class="name" href="./">Firefighter robot</a>
-  <nav><a href="./" aria-current="page">Progress</a><a href="concepts/">Body concepts</a><a href="#files">Files</a><a href="https://github.com/promaaa/vision-sobang">Code</a></nav>
+  <nav><a href="./" aria-current="page">Progress</a><a href="concepts/">Body concepts</a><a href="torso-pump/">Torso pump</a><a href="#files">Files</a><a href="https://github.com/promaaa/vision-sobang">Code</a></nav>
 </div></header>
 
 <div class="page">
@@ -60,12 +60,13 @@
 
 <article id="top">
 <h1>Firefighter robot</h1>
-<p class="subtitle">Progress report. Last edited on 11 October 2026. The results date from 8 to 10 October 2026.</p>
+<p class="subtitle">Progress report. Last edited on 13 October 2026. The results date from 8 to 13 October 2026.</p>
 
 <div class="related">
   <b>Related articles</b>
   <ul>
     <li><a href="concepts/">Body concepts A to E</a></li>
+    <li><a href="torso-pump/">Pump inside the torso</a></li>
     <li><a href="https://github.com/HybridRobotics/berkeley-humanoid-lite-assets">Berkeley Humanoid Lite assets</a></li>
   </ul>
 </div>
@@ -83,6 +84,7 @@
 <tr><td><a href="#official">Official walking policy</a></td><td>tested in simulation</td><td>No fall with any payload at 6 Nm. At 4 Nm, concept B with a full bottle falls in under 1 s.</td><td><code>sim/sim2sim/</code></td></tr>
 <tr><td><a href="#closed-loop">Closed loop</a></td><td>tested in simulation</td><td>The robot found the fire, walked, aimed and put it out from 1.9 m. It did not fall.</td><td><code>sim/sim2sim/</code></td></tr>
 <tr><td><a href="#turn">Our walking policy</a></td><td>tested in simulation</td><td>It turns on the spot at 0.39 rad/s. It is slower and less robust than the official policy.</td><td><code>sim/rl/</code></td></tr>
+<tr><td><a href="torso-pump/">Pump inside the torso</a></td><td>tested in simulation</td><td>Two printed tanks for a 33 g micropump: R1 inside the torso (0.63 L) and R2 on the sides (0.73 L). Both give the lowest centre of mass so far and walk like the bare robot. R1 is the suggested option.</td><td><code>cad/torso_tank/</code>, <code>sim/payload/</code></td></tr>
 <tr><td><a href="#hardware">Printable parts</a></td><td>planned</td><td>25 parts with STEP and STL files: pan-tilt in 2 versions, adapters, splash guard, backpack and bench rig.</td><td><code>cad/parts/</code>, <code>cad/backpack/</code>, <code>cad/bench/</code></td></tr>
 <tr><td><a href="#parts">Parts list</a></td><td>planned</td><td>463,273 KRW plus Waveshare shipping. The lab limit is 500,000 KRW.</td><td><code>docs/hardware/</code></td></tr>
 <tr><td><a href="#software">Aiming code and drivers</a></td><td>tested in simulation</td><td>45 tests pass. Nobody has run the code on real servos, a Pico or the robot.</td><td><code>aim/</code>, <code>actuators/</code></td></tr>
@@ -523,6 +525,7 @@ def detect(rgb, t):
 <tr><td>D3</td><td>Torque limit</td><td>Run the robot at 6 Nm instead of the 4 Nm default? Check the motor heat first.</td></tr>
 <tr><td>D4</td><td>Order</td><td>Who sends the parts list to the lab, and when?</td></tr>
 <tr><td>D5</td><td>Computer</td><td>Detector and aiming code on the robot's N95 PC, or on a laptop over Wi-Fi?</td></tr>
+<tr><td>D6</td><td>Tank</td><td>For the pump inside the torso: tank R1 inside the torso or R2 on the sides? See <a href="torso-pump/">Pump inside the torso</a>.</td></tr>
 </table></div>
 
 <h2 id="next">Next steps</h2>
@@ -548,7 +551,7 @@ def detect(rgb, t):
 </table></div>
 
 <footer>
-  <p>This page was last edited on 11 October 2026.</p>
+  <p>This page was last edited on 13 October 2026.</p>
   <p>Robot models and meshes: <a href="https://github.com/HybridRobotics/berkeley-humanoid-lite-assets">HybridRobotics/berkeley-humanoid-lite-assets</a>, licence CC BY-SA 4.0.</p>
 </footer>
 </article>
