@@ -14,5 +14,7 @@ open(p, "w").write(s)
 PY
 mkdir -p "$S/concepts"
 python3 "$W/concepts.py" "$S/concepts/index.html"
+mkdir -p "$S/torso-pump"
+cp "$W/torso_pump.html" "$S/torso-pump/index.html"
 cp "$W/wiki.css" "$S/wiki.css"
-echo "built $S/index.html and $S/concepts/index.html"
+echo "built $S/index.html, $S/concepts/index.html and $S/torso-pump/index.html"

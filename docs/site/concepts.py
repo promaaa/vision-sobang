@@ -70,7 +70,7 @@ page = f'''<!doctype html>
 <body>
 <header class="topbar"><div>
   <a class="name" href="../">Firefighter robot</a>
-  <nav><a href="../">Progress</a><a href="./" aria-current="page">Body concepts</a><a href="../#files">Files</a><a href="https://github.com/promaaa/vision-sobang">Code</a></nav>
+  <nav><a href="../">Progress</a><a href="./" aria-current="page">Body concepts</a><a href="../torso-pump/">Torso pump</a><a href="../#files">Files</a><a href="https://github.com/promaaa/vision-sobang">Code</a></nav>
 </div></header>
 
 <div class="page">

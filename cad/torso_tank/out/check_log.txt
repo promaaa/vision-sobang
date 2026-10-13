@@ -1,0 +1,29 @@
+r1_tank            213.7 cm3    271 g  140 x 126 x 110 mm
+r1_deck            110.4 cm3    140 g  158 x 130 x 6 mm
+r2_tank_left       131.1 cm3    167 g  141 x 49 x 100 mm
+r2_tank_right      131.1 cm3    167 g  141 x 49 x 100 mm
+r2_pump_holder      15.7 cm3     20 g  28 x 45 x 32 mm
+r1_half_left       109.7 cm3    139 g  140 x 63 x 110 mm
+r1_half_right      104.0 cm3    132 g  140 x 63 x 110 mm
+r2_tub             105.1 cm3    133 g  139 x 44 x 100 mm
+r2_inner_plate      26.0 cm3     33 g  136 x 6 x 86 mm
+checks passed: bed fit, watertight STL, wall parameters >= 2 mm
+torso clearance r1_tank            2.0 mm at [-48.0, -62.0, 773.0]
+torso clearance r2_tank_left       2.5 mm at [54.0, 78.0, 609.0]
+torso clearance r2_tank_right      2.6 mm at [-54.0, -78.0, 598.0]
+torso clearance r2_pump_holder     2.5 mm at [50.0, -78.0, 569.0]
+torso clearance ref_pump_r1        7.0 mm at [-51.0, 10.0, 686.0]
+torso clearance ref_pump_r2        5.0 mm at [52.0, -80.0, 584.0]
+leg clearance, full URDF range:
+  r2_tank_left     min   0.1 mm, left leg, roll/yaw/pitch/knee = (0.116, -0.458, 0.982, 2.342) rad
+  r2_tank_right    min   0.1 mm, right leg, roll/yaw/pitch/knee = (-0.043, 0.589, 0.862, 2.342) rad
+  r2_pump_holder   min  45.4 mm, right leg, roll/yaw/pitch/knee = (-1.571, 0.327, 0.982, 2.443) rad
+  ref_pump_r2      min  49.8 mm, right leg, roll/yaw/pitch/knee = (-1.571, 0.327, 0.982, 2.443) rad
+leg clearance, knee <= 1.4 rad:
+  r2_tank_left     min  47.0 mm, left leg, roll/yaw/pitch/knee = (1.571, -0.458, -1.898, -0.0) rad
+  r2_tank_right    min  47.3 mm, right leg, roll/yaw/pitch/knee = (-1.571, -0.065, -1.898, -0.0) rad
+  r2_pump_holder   min  50.7 mm, right leg, roll/yaw/pitch/knee = (-0.989, 0.196, -1.898, -0.0) rad
+  ref_pump_r2      min  54.1 mm, right leg, roll/yaw/pitch/knee = (-0.989, 0.196, -1.898, -0.0) rad
+leg clearance > 10 mm with knee <= 1.4 rad. R1 sits inside the frame (no leg check).
+R1: water 0.632 L, empty 0.349 kg, full 0.981 kg
+R2: water 0.725 L, empty 0.526 kg, full 1.251 kg

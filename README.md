@@ -57,6 +57,7 @@ Run all commands from the repository root, unless a step says `cd`.
 | What | Command | Time | Output |
 | --- | --- | --- | --- |
 | Leg torques with each payload | `cd sim/payload && uv run python analyze.py` | 1 min | `sim/payload/results/` |
+| Pump inside the torso: tanks R1 and R2 (walking, pushes, slosh, jet) | `uv run python sim/payload/torso_tank.py` | 10 min | `sim/payload/results/torso_tank.md` |
 | Official Berkeley policy with each payload | `uv run python sim/sim2sim/run.py --noise` | 30 s | `sim/sim2sim/results/results_noise.md` |
 | Closed loop: see, walk, aim, spray (video) | `MUJOCO_GL=egl uv run python sim/sim2sim/demo.py bhl_A_real -2 -1.5 demo_real` | 10 s | `sim/sim2sim/results/demo_real.mp4` |
 | The six test scenarios | `MUJOCO_GL=egl uv run python sim/sim2sim/camera_loop.py --quick` | 1 min | `sim/sim2sim/results/suite_results.md` |
@@ -73,7 +74,7 @@ Each simulation folder has a README with all options, the method and the limits.
 
 | What | Needs | Where to start |
 | --- | --- | --- |
-| Printable parts (STEP, STL) and their checks | `uv sync --project cad` once | `cad/parts/README.md`, `cad/backpack/README.md`, `cad/bench/README.md` |
+| Printable parts (STEP, STL) and their checks | `uv sync --project cad` once | `cad/parts/README.md`, `cad/backpack/README.md`, `cad/bench/README.md`, `cad/torso_tank/README.md` |
 | Concept renders, camera views, turntable videos | Blender 5.2 | `cad/README.md`, `cad/camera_views/README.md` |
 | Synthetic fire images (RGB + thermal-like) | Blender 5.2 and an NVIDIA GPU, or download them | `sim/firescenes/README.md` |
 | Train a walking policy | Linux, an NVIDIA GPU, `cd sim/rl && uv sync` | `sim/rl/README.md` |
@@ -94,6 +95,7 @@ Each folder has a README with the method, the commands and the limits.
 | `cad/` | Blender models and renders of the five body concepts (A to E) | planned |
 | `cad/parts/` | Printable pan-tilt module for concept A, adapters for B and E (STEP, STL) | planned |
 | `cad/backpack/` | Printable splash guard and concept B backpack (STEP, STL) | planned |
+| `cad/torso_tank/` | Printable water tanks for a pump inside the torso: R1 inside the torso, R2 on the sides (STEP, STL) | planned |
 | `cad/bench/` | Printable table-top bench rig for the pan-tilt, water system and electronics | planned |
 | `cad/camera_views/` | What each robot camera sees, and fire size in pixels per sensor | tested in simulation |
 | `cad/turntable/` | Turntable videos of concept A and the bench rig | planned |

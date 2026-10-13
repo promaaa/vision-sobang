@@ -24,6 +24,7 @@ The details, the limits of these numbers, and the method follow below.
 Round 2 (concept A variants) is near the end of this page. It recommends the pan axis at x = -0.06 m.
 Round 3 uses the CAD parts. The worst single-leg pitch torque is 5.2 Nm for A_real and 3.9 Nm for B_real (full).
 Round 4 checks motor heat at 6 Nm. The result is unknown but probably acceptable for the motor copper. 4 Nm makes A_real and B_real fall in simulation.
+Round 5 puts a small pump (TCS M400K-V) inside the torso with two printed tanks: R1 inside the torso and R2 on the torso sides. Both lower the robot CoM by 12 to 19 mm compared with A_real and B_real. The policy walks and recovers from pushes as well as with A_real, and better than with the backpack.
 
 ## How to run
 
@@ -87,6 +88,18 @@ uv run python real_parts.py
 uv run python sim/payload/heat.py
 ```
 
+11. Run round 5, the pump inside the torso (about 10 min on 6 cores). Run `cad/torso_tank/body.py` and `models.py` first. It writes `results/torso_tank.md`, `torso_tank.json` and `torso_*.png`.
+
+```bash
+uv run python sim/payload/torso_tank.py
+```
+
+12. Make the round 5 videos (about 1 min). It writes `results/torso_*.mp4`.
+
+```bash
+MUJOCO_GL=egl uv run python sim/payload/torso_tank.py video
+```
+
 ## Files
 
 | File | What it does |
@@ -99,6 +112,7 @@ uv run python sim/payload/heat.py
 | `variants_a.py` | Round 2: concept A variants (pan axis, pan and tilt angle, counterweight). |
 | `real_parts.py` | Round 3: compares A_real and B_real (from the CAD outputs) with the older A and B models. |
 | `heat.py` | Round 4: walks the BHL policy for 60 s, logs joint torques, RMS, time above 4 Nm, copper loss estimate. |
+| `torso_tank.py` | Round 5: tanks R1 and R2 with the pump inside the torso. Statics, policy walking, policy push test, water slosh model, jet of the pump. `check` runs the self-check. |
 | `models/bhl_<variant>.xml` | Model files for reuse (for example by `sim/rl/`). |
 | `results/` | `results.json`, `placement.json`, `results.md`, PNG plots. |
 
@@ -108,6 +122,8 @@ The model files are in `models/`. Each file is a full scene: robot, payload, flo
 Variants: `biped`, `full`, `A`, `A_v0`, `B`, `B_empty`, `C`, `C_empty`, `D`, `D_empty`, `E`.
 `A` is A v1 from round 2 (pan axis moved back). `A_v0` is the first version of A.
 Round 3 adds `A_real`, `B_real` and `B_real_empty`, built from the CAD outputs.
+Round 5 adds `R1`, `R1_half`, `R1_empty`, `R2`, `R2_half` and `R2_empty` from `cad/torso_tank/out/assembly.json`.
+`torso_tank.py` also writes `R1_half_slosh_nobaffle`, `R1_half_slosh_baffle`, `R2_half_slosh_nobaffle` and `R2_half_slosh_baffle`. These have sliding water masses on springs (2 extra joints per tank, after the 12 leg joints).
 
 - Each file has a keyframe `stand`. It holds the BHL stand pose with both feet flat, 1 mm above the floor.
 - The actuators are the original BHL `motor` actuators with forcerange ±20 Nm. The sensors are the original BHL sensors.
@@ -642,6 +658,128 @@ Before the first long run:
 3. Before the tests, set a stop temperature well below the softening point of the printed material. Use the filament datasheet.
 4. If the temperature still rises after several tests, add pauses or lower the limit on the hottest joint only.
 5. Avoid long standing with a walk command. It loads one ankle at 4.2 to 4.4 Nm RMS. Send a zero command when the robot must wait.
+
+## Round 5: pump inside the torso, tank R1 or R2
+
+Status: **tested in simulation**. The tank masses and centres come from the CAD in `cad/torso_tank/` (planned, not printed). Nothing is measured on board.
+
+**Assumed:** The pump is the TCS Micropumps M400K-V (brushless centrifugal, 3.2 mm bore tubing, 33 g, 12 V 5.8 W, 380 mbar, 1150 mL/min free flow). The request named "Centrifugal Brushless Motor Micropumps for Liquids – for 3.2mm ID tubing". I did not find that shop page.
+**Assumed:** The top of the robot is the ST3215 pan-tilt of A_real without the gun (0.552 kg), a 30 g nozzle and the splash guard (91 g). This is the same for R1 and R2.
+**Not verified:** The pump curve between the two data points (free flow, maximum pressure) is a straight line (guess). The slosh damping ratios (0.01 without baffles, 0.05 with baffles) are guesses.
+
+### Question
+
+The team wants the pump inside the torso for a lower CoM and better balance. Where should the water go, and what does it change for the legs and the walking policy?
+
+### Options
+
+- **R1, tank inside the torso:** one printed tank above the mini PC and under the pan-tilt deck, 0.632 L. The pump hangs under it, inside the torso, below the water.
+- **R2, side tanks:** two printed tanks on the torso sides above the hips, 0.725 L in total. The pump must sit below the water, so it goes in front of the right hip, not inside the torso (see `cad/torso_tank/README.md`, "Pump").
+- Comparison: A_real (water gun on the pan-tilt) and B_real (backpack with the 570 g Seaflo pump), from round 3.
+
+### What I simulated
+
+1. **Statics:** the same slow poses and method as rounds 1 to 3.
+2. **Walking:** the shipped BHL policy, 20 s, with the training observation noise, at 6 Nm and 4 Nm. The loop is the one of `sim/sim2sim/run.py`.
+3. **Push test with the policy:** a horizontal force on the torso for 0.1 s, forward, backward, left or right, while the robot stands or walks at 0.3 m/s (6 Nm). Bisection finds the largest impulse with no fall in the next 3 s (resolution 0.375 N s). The push comes at 3.0, 3.2 or 3.4 s, so it hits three phases of the gait. The table keeps the worst of the three.
+4. **Slosh:** each half-full tank gets the standard equivalent model of the first sloshing mode of a rectangular tank (NASA SP-106; Ibrahim, *Liquid Sloshing Dynamics*, 2005). Part of the water becomes a mass on an x spring and a y spring at the water centre. The rest stays rigid. "Baffles" uses the baffle cells of the CAD. The slosh mass can move at most a quarter of the tank length each way.
+5. **Jet:** the operating point of the pump with a round nozzle, after the 0.2 m lift to the nozzle and the friction in 0.6 m of 3.2 mm tube. The range is to the floor from a nozzle 0.9 m high, at the best angle, without air drag.
+
+### Results
+
+Tables from `results/torso_tank.md`.
+
+| Model | Add-on mass (kg) | CoM height (m) | CoM fore-aft / sideways (mm) | Stand peak (Nm) | Crouch peak (Nm) | Single-leg pitch peak (Nm) | Single-leg peak, all joints (Nm) |
+|---|---|---|---|---|---|---|---|
+| bare biped | 0.00 | 0.362 | -2 / +0 | 1.5 | 2.7 | 4.3 | 7.8 |
+| A_real: water gun on the pan-tilt | 1.54 | 0.425 | -0 / -0 | 1.9 | 3.3 | 5.2 | 8.6 |
+| B_real: backpack + Seaflo pump, full | 2.76 | 0.429 | -15 / +3 | 1.6 | 3.2 | 3.9 | 9.6 |
+| B_real, empty | 1.81 | 0.411 | -8 / -1 | 1.5 | 2.9 | 4.4 | 8.9 |
+| R1: tank inside the torso, full | 1.65 | 0.413 | +3 / +0 | 2.1 | 3.5 | 5.7 | 8.8 |
+| R1, half | 1.34 | 0.405 | +2 / +0 | 2.0 | 3.4 | 5.4 | 8.6 |
+| R1, empty | 1.02 | 0.397 | +1 / +0 | 1.9 | 3.2 | 5.1 | 8.4 |
+| R2: side tanks, full | 1.92 | 0.410 | +3 / -0 | 2.2 | 3.6 | 5.8 | 8.9 |
+| R2, half | 1.56 | 0.403 | +2 / -0 | 2.1 | 3.4 | 5.5 | 8.7 |
+| R2, empty | 1.20 | 0.397 | +1 / -0 | 2.0 | 3.3 | 5.3 | 8.5 |
+
+| Model | stand, 6 Nm | vx 0.3, 6 Nm | vx 0.2 + yaw 0.5, 6 Nm | stand, 4 Nm | vx 0.3, 4 Nm | vx 0.2 + yaw 0.5, 4 Nm |
+|---|---|---|---|---|---|---|
+| bare biped | stands | +0.29 m/s | +0.19 m/s, +0.50 rad/s | stands | +0.17 m/s | +0.09 m/s, +0.38 rad/s |
+| A_real | stands | +0.29 m/s | +0.17 m/s, +0.49 rad/s | stands | falls at 9.1 s | falls at 9.6 s |
+| B_real, full | stands | +0.20 m/s | +0.08 m/s, +0.35 rad/s | falls at 0.9 s | falls at 0.8 s | falls at 0.8 s |
+| R1, full | stands | +0.30 m/s | +0.17 m/s, +0.51 rad/s | stands | falls at 18.0 s | falls at 6.4 s |
+| R1, empty | stands | +0.30 m/s | +0.19 m/s, +0.52 rad/s | stands | +0.18 m/s | +0.11 m/s, +0.36 rad/s |
+| R2, full | stands | +0.29 m/s | +0.18 m/s, +0.53 rad/s | stands | falls at 8.6 s | falls at 3.8 s |
+| R2, empty | stands | +0.29 m/s | +0.18 m/s, +0.51 rad/s | stands | +0.19 m/s | +0.11 m/s, +0.37 rad/s |
+
+Largest push the policy survives (N s, 0.1 s on the torso, worst of 3 gait phases, 6 Nm):
+
+| Model | standing: forward | standing: back | standing: left | standing: right | walking: forward | walking: back | walking: left | walking: right |
+|---|---|---|---|---|---|---|---|---|
+| bare biped | 7.5 | 4.5 | 3.8 | 3.8 | 6.0 | 7.9 | 1.9 | 2.6 |
+| A_real | 9.4 | 4.5 | 4.1 | 4.1 | 8.6 | 7.9 | 2.6 | 3.8 |
+| B_real, full | 5.6 | 3.4 | 4.5 | 4.5 | 8.6 | 4.5 | 2.6 | 2.6 |
+| R1, full | 8.6 | 4.9 | 4.1 | 4.1 | 7.5 | 7.9 | 2.6 | 3.4 |
+| R1, half | 9.0 | 5.2 | 4.5 | 4.1 | 7.9 | 7.1 | 2.6 | 3.4 |
+| R2, full | 9.0 | 5.2 | 4.1 | 4.1 | 7.1 | 9.8 | 2.6 | 3.4 |
+| R2, half | 8.6 | 5.2 | 4.1 | 4.1 | 7.5 | 8.2 | 2.6 | 3.0 |
+
+`results/torso_tank.md` has all rows, also the empty tanks and the slosh models.
+
+Slosh, half-full tanks:
+
+| Tank | Water (kg) | Slosh mass, share | Slosh frequency fore-aft / sideways (Hz) | Slosh travel while walking and turning, peak fore-aft / sideways (mm) |
+|---|---|---|---|---|
+| R1, no baffles | 0.316 | 71 % | 2.0 / 1.9 | 31 / 33 (the model stop is 30 mm) |
+| R1, CAD baffles | 0.316 | 39 % | 5.1 / 4.3 | 8 / 10 |
+| R2, no baffles (each tank) | 0.181 | 60 % | 2.2 / 4.4 | 24 / 7 |
+| R2, CAD baffles (each tank) | 0.181 | 24 % | 5.0 / 4.4 | 3 / 3 |
+
+Jet of the M400K-V at 12 V (estimate, no air drag):
+
+| Nozzle (mm) | Flow (L/min) | Exit speed (m/s) | Range to the floor from 0.9 m (m) | Spray time with R1 full (min) |
+|---|---|---|---|---|
+| 1.0 | 0.31 | 6.6 | 5.3 | 2.0 |
+| 1.5 | 0.53 | 5.0 | 3.3 | 1.2 |
+| 2.0 | 0.67 | 3.5 | 2.0 | 0.9 |
+| 3.0 | 0.77 | 1.8 | 0.8 | 0.8 |
+
+![Static torques](results/torso_torque.png)
+
+![CoM height and fore-aft offset](results/torso_com.png)
+
+![Push test with the policy](results/torso_push.png)
+
+![Slosh mass travel](results/torso_slosh.png)
+
+![Jet](results/torso_jet.png)
+
+Videos: `results/torso_R1_walk.mp4` and `torso_R2_walk.mp4` (walk and turn, 6 Nm), `torso_push_B_real.mp4`, `torso_push_R1.mp4` and `torso_push_R2.mp4` (the same 5.5 N s backward push while walking: B_real falls, R1 and R2 recover), `torso_slosh_R1.mp4` (R1 half full without baffles, see-through torso, the cyan sphere is the slosh mass).
+
+### What the results mean
+
+- **Lower CoM:** R1 and R2 give the lowest robot CoM of all our concepts: 0.413 m and 0.410 m with full tanks. A_real is at 0.425 m and B_real at 0.429 m.
+- **R1 against R2:** the water of R2 sits 10 cm lower than the water of R1. But the water is only about 5 % of the robot mass, so the robot CoM moves only 3 mm. In walking, R1 and R2 give the same results. In the push test they are within one bisection step in 7 of 8 directions. R2 is better against a backward push while walking: 9.8 against 7.9 N s with full tanks, 8.2 against 7.1 N s half full.
+- **Push recovery:** R1 and R2 are within 1.5 N s of A_real in every direction. Both are better than the full backpack against backward pushes: 7.9 to 9.8 N s against 4.5 N s while walking.
+- **Walking:** R1 and R2 track the speed command as well as the bare biped (0.29 to 0.30 m/s for 0.30 m/s). The full backpack reaches only 0.20 m/s.
+- **Leg torque:** the single-leg pitch torque is 5.7 to 5.8 Nm, below 6 Nm. It is 0.5 Nm more than A_real, because the mass sits 3 mm further forward. The backpack (3.9 Nm) is still the best for this number, because it moves the CoM back.
+- **4 Nm:** with full tanks, R1 and R2 fall in some 4 Nm walking runs, like A_real and B_real. 6 Nm is still needed.
+- **Slosh:** without baffles, 71 % of the water in a half-full R1 sloshes at about 2 Hz, near the step rate. The baffles in the CAD cut the peak travel by a factor of 2 to 10. In these runs the slosh did not change the push results at 6 Nm by more than one bisection step. Keep the baffles.
+- **Jet:** this pump gives a weak jet. With a 1.0 to 1.5 mm nozzle the estimate is 5.0 to 6.6 m/s and at most 3.3 to 5.3 m without drag. The real range is shorter. The robot must get within about 2 m of the fire. Set `ControllerConfig.v0` in `aim/` after a measurement (`aim/README.md`, "Jet speed v0").
+
+### Recommendation
+
+1. **Use R1** if the pump must be inside the torso. It feeds the pump by gravity, needs no knee limit, adds no width, and keeps the tank inside the frame, where it is protected from heat and knocks.
+2. Its cost is water above the mini PC. Test the tank for leaks, use the drip tray drain, and add a splash cover over the PC.
+3. **Use R2** if water above the computer is not acceptable. It carries 15 % more water, but it needs the 1.4 rad knee limit, a pump outside the torso, and a tube across the front.
+4. The height of the water does not decide this. Both give nearly the same balance in simulation.
+
+### Not done (round 5)
+
+- Heat logs (round 4) for R1 and R2.
+- A slosh model for full tanks with an air gap, or for more than one mode. Large slosh in the unbaffled R1 hits the model stop, so those numbers are only a rough guide.
+- Air drag and jet break-up in the jet estimate.
+- A leg check for the R2 tube that crosses the front of the torso.
 
 ## Not done and limits
 

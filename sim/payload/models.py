@@ -118,6 +118,26 @@ def real_parts():
 
 
 PARTS.update(real_parts())
+
+
+def torso_tank_parts():
+    """Round 5: R1 (tank inside the torso) and R2 (side tanks) with the TCS M400K-V pump, from
+    cad/torso_tank/out/assembly.json. The top is the A_real pan-tilt without the gun, plus a nozzle (estimate)."""
+    f = os.path.normpath(os.path.join(HERE, "../../cad/torso_tank/out/assembly.json"))
+    if not os.path.exists(f):
+        return {}
+    a = json.load(open(f))["options"]
+    top = [PARTS["A_real"][0], ("nozzle_fitting", 0.03, (0.03, 0.0, 0.905), (0.06, 0.02, 0.02)), PARTS["A_real"][2]]
+    out = {}
+    for k, o in a.items():
+        tank = [(p["name"], p["mass_kg"], tuple(p["com_m"]), tuple(p["size_m"])) for p in o["parts"]]
+        for fill, suffix in (("full", ""), ("half", "_half")):
+            water = [(w["name"], w["mass_kg"], tuple(w["com_m"]), tuple(w["size_m"])) for w in o["water"][fill]]
+            out[k + suffix] = top + tank + water
+    return out
+
+
+PARTS.update(torso_tank_parts())
 HOSE_POINT = (-0.115, 0.0, 0.53)  # E: hose connector at the back of the pelvis, robot frame
 LANCE_OFFSET = 0.05  # C: lance centre is 5 cm past the hand frame, along the forearm (cad/concepts.py)
 
@@ -184,6 +204,8 @@ VARIANTS = {"biped": ("biped", False), "full": ("full", False), "A": ("A", False
             "B": ("B", False),
             "B_empty": ("B", True), "C": ("C", False), "C_empty": ("C", True), "D": ("D", False),
             "D_empty": ("D", True), "E": ("E", False)}
+VARIANTS.update({v: (v.replace("_empty", ""), v.endswith("_empty")) for k in ("R1", "R2") if k in PARTS
+                 for v in (k, f"{k}_half", f"{k}_empty")})
 
 
 def path(variant):

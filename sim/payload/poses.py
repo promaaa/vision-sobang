@@ -43,7 +43,7 @@ def place(m, q, stance="left", gap=0.0):
     mujoco.mj_kinematics(m, d)
     b = d.body(f"leg_{stance}_ankle_roll")
     flat = b.xmat.reshape(3, 3).copy()  # foot orientation at zero joints: flat on the floor
-    for j, v in {**q, **(ARM_POSE if m.njnt > 13 else {})}.items():
+    for j, v in {**q, **(ARM_POSE if m.nu > 12 else {})}.items():
         d.joint(j).qpos = v
     mujoco.mj_kinematics(m, d)
     R = flat @ b.xmat.reshape(3, 3).T  # turns the current foot orientation back to flat
